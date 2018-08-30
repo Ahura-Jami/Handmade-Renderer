@@ -5,8 +5,8 @@ project(Engine VERSION 0.0.1)
 #=======================================================================================================================
 # Add Source and header files
 #=======================================================================================================================
-list(APPEND ENGINE_HEADERS include/library.h)
-list(APPEND ENGINE_SOURCES source/library.cpp)
+list(APPEND ENGINE_HEADERS include/engine.h)
+list(APPEND ENGINE_SOURCES source/engine.cpp)
 
 #=======================================================================================================================
 # Define the target and add all source and header files to it
