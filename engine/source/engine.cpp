@@ -76,10 +76,6 @@ void Engine::ProcessInput()
 
 void Engine::Render()
 {
-	if (!Init())
-	{
-		return;
-	}
 
 	// Render loop
 	while(!glfwWindowShouldClose(window))

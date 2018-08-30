@@ -23,13 +23,13 @@ public:
 	 */
 	void Render();
 
-private:
 	/**
 	 * Initializes a GLFW window object
 	 * @return true if window is successfully created, false otherwise.
 	 */
 	bool Init();
 
+private:
 	/**
 	 * Deallocates all OpenGL's and GLFW's resources.
 	 * Called when window is closed and render loop exists.
