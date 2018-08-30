@@ -6,6 +6,8 @@
 int main()
 {
 	auto engine = std::make_unique<Engine>();
+
+	engine->Render();
 }
 
 //void FrameBufferSizeCallback(GLFWwindow* window, int width, int height);

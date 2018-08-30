@@ -18,6 +18,11 @@ public:
 	 */
 	~Engine();
 
+	/**
+	 * Initializes the render loop and processes all rendering commands.
+	 */
+	void Render();
+
 private:
 	/**
 	 * Initializes a GLFW window object
@@ -25,9 +30,13 @@ private:
 	 */
 	bool Init();
 
+	/**
+	 * Deallocates all OpenGL's and GLFW's resources.
+	 * Called when window is closed and render loop exists.
+	 */
 	void Destroy();
 
-	void Render();
+
 
 	/**
 	 * A Callback function for windows resize event that gets executed whenever the size of the widnow

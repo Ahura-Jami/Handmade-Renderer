@@ -6,10 +6,7 @@
 
 Engine::Engine()
 {
-	if (Init())
-	{
-		Render();
-	}
+
 }
 
 Engine::~Engine()
@@ -79,6 +76,11 @@ void Engine::ProcessInput()
 
 void Engine::Render()
 {
+	if (!Init())
+	{
+		return;
+	}
+
 	// Render loop
 	while(!glfwWindowShouldClose(window))
 	{
