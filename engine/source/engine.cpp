@@ -1,8 +1,7 @@
 #include "engine.h"
 
 #include <iostream>
-#include <engine.h>
-
+#include <cmath>
 
 Engine::Engine()
 {
@@ -96,7 +95,7 @@ void Engine::Render()
 		for (const auto& actor : actors)
 		{
 			// Activate the program and set it as current program to be used for subsequent drawing commands.
-			glUseProgram(actor.shader_program);
+			glUseProgram(actor.shader.GetShaderProgram());
 
 			// Bind vertex array object
 			glBindVertexArray(actor.vertex_array_object);

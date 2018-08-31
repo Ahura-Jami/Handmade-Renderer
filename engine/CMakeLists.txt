@@ -6,9 +6,13 @@ project(Engine VERSION 0.0.1)
 # Add Source and header files
 #=======================================================================================================================
 list(APPEND ENGINE_HEADERS include/engine.h)
+list(APPEND ENGINE_SOURCES source/engine.cpp)
+
 list(APPEND ENGINE_HEADERS include/actor.h)
 
-list(APPEND ENGINE_SOURCES source/engine.cpp)
+list(APPEND ENGINE_HEADERS include/shader.h)
+list(APPEND ENGINE_SOURCES source/shader.cpp)
+
 
 #=======================================================================================================================
 # Define the target and add all source and header files to it

@@ -2,17 +2,19 @@
 #define ENGINE_ACTOR_H
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
 #include <functional>
+
+#include "shader.h"
 
 class Actor
 {
 public:
-	GLuint vertex_array_object;
-	GLuint vertex_buffer_object;
-	GLuint element_buffer_object;
-	GLuint shader_program;
+	Actor() = default;
+
+	GLuint vertex_array_object{};
+	GLuint vertex_buffer_object{};
+	GLuint element_buffer_object{};
+	Shader shader;
 	std::function<void()> draw_function;
 };
 

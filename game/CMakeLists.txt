@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.8.0)
 # Main Module
 list(APPEND SOURCE_FILES source/main.cpp)
 list(APPEND HEADER_FILES source/triangle.h)
-list(APPEND HEADER_FILES source/rectangle.h)
+#list(APPEND HEADER_FILES source/rectangle.h)
 
 mark_as_advanced(${SOURCE_FILES} ${HEADER_FILES})
 
@@ -17,4 +17,7 @@ add_executable(Game ${SOURCE_FILES} ${HEADER_FILES})
 
 target_link_libraries(Game PRIVATE Engine)
 
-#target_include_directories(Game PRIVATE source/public)
+#=======================================================================================================================
+# Define macros
+#=======================================================================================================================
+target_compile_definitions(Game PRIVATE PROJECT_DIR="${CMAKE_SOURCE_DIR}/")

@@ -1,10 +1,10 @@
 #include <iostream>
 #include <memory>
+#include <cstring>
 
 #include "engine.h"
 
 #include "triangle.h"
-#include "rectangle.h"
 
 int main()
 {
@@ -15,38 +15,23 @@ int main()
 	if (!engine->Init())
 		return -1;
 
-	// Exercise 2: Create two different triangles
-	float v1[] = {
-			0.0f, 0.0f, 0.0f,
-			-0.5f, 0.5f, 0.0f,
-			-0.5f, 0.0f, 0.0f
+	float v[] = {
+			0.50f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f, // bottom right
+			-0.5f, -0.5f, 0.0f,		0.0f, 1.0f, 0.0f, // bottom left
+			0.0f, 0.5f, 0.0f,		0.0f, 0.0f, 1.0f  // top
 	};
-	auto triangle1 = Triangle(v1);
-	engine->Register(triangle1);
 
-	float v2[] = {
-			0.0f, 0.0f, 0.0f,
-			0.5f, 0.5f, 0.0f,
-			0.5f, 0.0f, 0.0f
-	};
-	
-	const char* fragment_shader_source =
-			"#version 330 core\n"
-			"out vec4 frag_color;\n"
-			"void main()\n"
-			"{\n"
-			"	frag_color = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
-			"}\n\0";
-	auto triangle2 = Triangle(v2, fragment_shader_source);
-	engine->Register(triangle2);
+	std::string vertex_path = std::string(PROJECT_DIR) + "/game/shaders/triangle_shader.vert";
+	std::string fragment_path = std::string(PROJECT_DIR) + "/game/shaders/triangle_shader.frag";
 
-	// Create and register the custom 2D rectangle
-//	auto rectangle = Rectangle();
-//	engine->Register(rectangle);
+	Shader triangle_shader = Shader(vertex_path.c_str(), fragment_path.c_str());
+
+	auto triangle = Triangle(v, triangle_shader);
+
+	engine->Register(triangle);
 
 	// Enable wireframe mode
 //	engine->ToggleWireframe();
-
 
 	// Render the registered actors
 	engine->Render();

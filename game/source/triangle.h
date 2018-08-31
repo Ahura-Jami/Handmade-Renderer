@@ -9,56 +9,14 @@
 class Triangle : public Actor
 {
 public:
-	Triangle(const float* in_vertices)
+	Triangle(const float* in_vertices, Shader in_shader)
 	{
-		for (int i = 0; i < 9; ++i)
+		for (int i = 0; i < 18; ++i)
 		{
 			vertices[i] = in_vertices[i];
 		}
 
-		// vertex shader source code
-		// TODO(Ahura Jami): Move to a separate file.
-		vertex_shader_source =
-				"#version 330 core\n"
-				"layout (location = 0) in vec3 pos;\n"
-				"void main()\n"
-				"{\n"
-				"	gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);\n"
-				"}\0";
-
-		// Fragment shader
-		// TODO(Ahura Jami): Move to a separate file.
-		fragment_shader_source =
-				"#version 330 core\n"
-				"out vec4 frag_color;\n"
-				"void main()\n"
-				"{\n"
-				"	frag_color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-				"}\n\0";
-
-		Create();
-	}
-
-	Triangle(const float* in_vertices, const char* in_fragment_shader_source)
-	{
-		for (int i = 0; i < 9; ++i)
-		{
-			vertices[i] = in_vertices[i];
-		}
-
-		// vertex shader source code
-		// TODO(Ahura Jami): Move to a separate file.
-		vertex_shader_source =
-				"#version 330 core\n"
-				"layout (location = 0) in vec3 pos;\n"
-				"void main()\n"
-				"{\n"
-				"	gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);\n"
-				"}\0";
-
-		// Fragment shader
-		// TODO(Ahura Jami): Move to a separate file.
-		fragment_shader_source = in_fragment_shader_source;
+		shader = in_shader;
 
 		Create();
 	}
@@ -90,11 +48,13 @@ private:
 		// Tell OpenGL how to interpret vertex data
 		// @NOTE: These two functions need to be called before binding a new buffer and
 		//		  not necessarily before releasing the currently bound buffer.
-//		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-
-		// Exercise 1
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		// Vertex layout
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
+
+		// Color layout
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(1);
 
 		// Release the buffer target
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -109,78 +69,14 @@ private:
 		{
 			glDrawArrays(GL_TRIANGLES, 0, 3);
 		};
-
-
-
-		// Create an empty shader object
-		GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-
-		// Attach the source code to the newly created empty shader object
-		glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
-
-		// Compile the vertex shader
-		glCompileShader(vertex_shader);
-
-		// Check whether the compilation was successfull
-		GLint success;
-		glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
-
-		if (!success)
-		{
-			GLchar info_log[512];
-			glGetShaderInfoLog(vertex_shader, 512, NULL, info_log);
-			std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << info_log << std::endl;
-		}
-
-
-
-		// Create and compile the fragment shader just like above vertex shader
-		GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-		glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
-		glCompileShader(fragment_shader);
-
-		glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
-		if (!success)
-		{
-			GLchar info_log[512];
-			glGetShaderInfoLog(fragment_shader, 512, NULL, info_log);
-			std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << info_log << std::endl;
-		}
-
-		// Link the compiled shaders into a shader program that can be used for rendering
-		// 1. Create shader program
-		shader_program = glCreateProgram();
-
-		// 2. Attach the compiled shaders to the program
-		glAttachShader(shader_program, vertex_shader);
-		glAttachShader(shader_program, fragment_shader);
-
-		// 3. Link the attached shaders to each other
-		glLinkProgram(shader_program);
-
-		// Check if the linking was successfull
-		glGetProgramiv(shader_program, GL_LINK_STATUS, &success);
-		if (!success)
-		{
-			GLchar info_log[512];
-			glGetProgramInfoLog(fragment_shader, 512, NULL, info_log);
-			std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << info_log << std::endl;
-		}
-
-		// Delete the created shaders as they're no longer needed (since they're
-		// already compiled and linked to the program).
-		glDeleteShader(vertex_shader);
-		glDeleteShader(fragment_shader);
 	}
 
 private:
 	/**
 	* Vertex input in normalized device coordinates [-1, 1]
 	*/
-	float vertices[9];
+	float vertices[18]{};
 
-	const GLchar* vertex_shader_source;
-	const GLchar* fragment_shader_source;
 };
 
 #endif //ENGINE_TRIANGLE_H
