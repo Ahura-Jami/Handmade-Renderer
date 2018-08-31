@@ -2,14 +2,20 @@
 #define ENGINE_TRIANGLE_H
 
 #include <iostream>
+#include <vector>
 
 #include "actor.h"
 
 class Triangle : public Actor
 {
 public:
-	Triangle()
+	Triangle(const float* in_vertices)
 	{
+		for (int i = 0; i < 9; ++i)
+		{
+			vertices[i] = in_vertices[i];
+		}
+
 		Create();
 	}
 
@@ -18,23 +24,6 @@ public:
 private:
 	void Create()
 	{
-		// Vertex input in normalized device coordinates [-1, 1]
-//		float vertices[] = {
-//				-0.5f, -0.5f, 0.0f,
-//				 0.5f, -0.5f, 0.0f,
-//				 0.0f,  0.5f, 0.0f
-//		};
-
-		// Exercise 1: two triangles next to each other
-		float vertices[] = {
-				-0.5f,  0.5f, 0.0f, // 1st triangle
-				-0.5f,  0.0f, 0.0f,
-				 0.0f,  0.0f, 0.0f,
-				 0.5f,  0.5f, 0.0f, // 2nd triangle
-				 0.5f,  0.0f, 0.0f,
-				 0.0f,  0.0f, 0.0f
-		};
-
 		// Bind a vertex array object to store the soon to be defined configuration of
 		// vertex attribute
 		glGenVertexArrays(1, &vertex_array_object);
@@ -157,6 +146,12 @@ private:
 		glDeleteShader(vertex_shader);
 		glDeleteShader(fragment_shader);
 	}
+
+private:
+	/**
+	* Vertex input in normalized device coordinates [-1, 1]
+	*/
+	float vertices[9];
 };
 
 #endif //ENGINE_TRIANGLE_H

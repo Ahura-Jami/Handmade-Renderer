@@ -15,13 +15,24 @@ int main()
 	if (!engine->Init())
 		return -1;
 
-	// Create a custom 2d triangle actor
-	auto triangle = Triangle();
+	// Exercise 2: Create two different triangles
+	float v1[] = {
+			0.0f, 0.0f, 0.0f,
+			-0.5f, 0.5f, 0.0f,
+			-0.5f, 0.0f, 0.0f
+	};
+	auto triangle1 = Triangle(v1);
+	engine->Register(triangle1);
 
-	// Register the triangle for engine to draw
-	engine->Register(triangle);
+	float v2[] = {
+			0.0f, 0.0f, 0.0f,
+			0.5f, 0.5f, 0.0f,
+			0.5f, 0.0f, 0.0f
+	};
+	auto triangle2 = Triangle(v2);
+	engine->Register(triangle2);
 
-//	// Create and register the custom 2D rectangle
+	// Create and register the custom 2D rectangle
 //	auto rectangle = Rectangle();
 //	engine->Register(rectangle);
 
