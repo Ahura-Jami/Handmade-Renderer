@@ -19,10 +19,20 @@ private:
 	void Create()
 	{
 		// Vertex input in normalized device coordinates [-1, 1]
+//		float vertices[] = {
+//				-0.5f, -0.5f, 0.0f,
+//				 0.5f, -0.5f, 0.0f,
+//				 0.0f,  0.5f, 0.0f
+//		};
+
+		// Exercise 1: two triangles next to each other
 		float vertices[] = {
-				-0.5f, -0.5f, 0.0f,
-				0.5f, -0.5f, 0.0f,
-				0.0f,  0.5f, 0.0f
+				-0.5f,  0.5f, 0.0f, // 1st triangle
+				-0.5f,  0.0f, 0.0f,
+				 0.0f,  0.0f, 0.0f,
+				 0.5f,  0.5f, 0.0f, // 2nd triangle
+				 0.5f,  0.0f, 0.0f,
+				 0.0f,  0.0f, 0.0f
 		};
 
 		// Bind a vertex array object to store the soon to be defined configuration of
@@ -47,6 +57,9 @@ private:
 		// Tell OpenGL how to interpret vertex data
 		// @NOTE: These two functions need to be called before binding a new buffer and
 		//		  not necessarily before releasing the currently bound buffer.
+//		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+		// Exercise 1
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
 
@@ -61,7 +74,9 @@ private:
 		// populate draw function
 		draw_function = []()
 		{
-			glDrawArrays(GL_TRIANGLES, 0, 3);
+//			glDrawArrays(GL_TRIANGLES, 0, 3);
+			// Exercise 1
+			glDrawArrays(GL_TRIANGLES, 0, 6);
 		};
 
 		// vertex shader source code

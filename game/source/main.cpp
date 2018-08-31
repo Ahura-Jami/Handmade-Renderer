@@ -16,14 +16,14 @@ int main()
 		return -1;
 
 	// Create a custom 2d triangle actor
-//	auto triangle = Triangle();
+	auto triangle = Triangle();
 
 	// Register the triangle for engine to draw
-//	engine->Register(triangle);
+	engine->Register(triangle);
 
 //	// Create and register the custom 2D rectangle
-	auto rectangle = Rectangle();
-	engine->Register(rectangle);
+//	auto rectangle = Rectangle();
+//	engine->Register(rectangle);
 
 	// Enable wireframe mode
 	engine->ToggleWireframe();
