@@ -29,7 +29,15 @@ int main()
 			0.5f, 0.5f, 0.0f,
 			0.5f, 0.0f, 0.0f
 	};
-	auto triangle2 = Triangle(v2);
+	
+	const char* fragment_shader_source =
+			"#version 330 core\n"
+			"out vec4 frag_color;\n"
+			"void main()\n"
+			"{\n"
+			"	frag_color = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
+			"}\n\0";
+	auto triangle2 = Triangle(v2, fragment_shader_source);
 	engine->Register(triangle2);
 
 	// Create and register the custom 2D rectangle
@@ -37,7 +45,7 @@ int main()
 //	engine->Register(rectangle);
 
 	// Enable wireframe mode
-	engine->ToggleWireframe();
+//	engine->ToggleWireframe();
 
 
 	// Render the registered actors

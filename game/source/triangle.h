@@ -16,6 +16,50 @@ public:
 			vertices[i] = in_vertices[i];
 		}
 
+		// vertex shader source code
+		// TODO(Ahura Jami): Move to a separate file.
+		vertex_shader_source =
+				"#version 330 core\n"
+				"layout (location = 0) in vec3 pos;\n"
+				"void main()\n"
+				"{\n"
+				"	gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);\n"
+				"}\0";
+
+		// Fragment shader
+		// TODO(Ahura Jami): Move to a separate file.
+		fragment_shader_source =
+				"#version 330 core\n"
+				"out vec4 frag_color;\n"
+				"void main()\n"
+				"{\n"
+				"	frag_color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+				"}\n\0";
+
+		Create();
+	}
+
+	Triangle(const float* in_vertices, const char* in_fragment_shader_source)
+	{
+		for (int i = 0; i < 9; ++i)
+		{
+			vertices[i] = in_vertices[i];
+		}
+
+		// vertex shader source code
+		// TODO(Ahura Jami): Move to a separate file.
+		vertex_shader_source =
+				"#version 330 core\n"
+				"layout (location = 0) in vec3 pos;\n"
+				"void main()\n"
+				"{\n"
+				"	gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);\n"
+				"}\0";
+
+		// Fragment shader
+		// TODO(Ahura Jami): Move to a separate file.
+		fragment_shader_source = in_fragment_shader_source;
+
 		Create();
 	}
 
@@ -63,20 +107,10 @@ private:
 		// populate draw function
 		draw_function = []()
 		{
-//			glDrawArrays(GL_TRIANGLES, 0, 3);
-			// Exercise 1
-			glDrawArrays(GL_TRIANGLES, 0, 6);
+			glDrawArrays(GL_TRIANGLES, 0, 3);
 		};
 
-		// vertex shader source code
-		// TODO(Ahura Jami): Move to a separate file.
-		const GLchar* vertex_shader_source =
-				"#version 330 core\n"
-				"layout (location = 0) in vec3 pos;\n"
-				"void main()\n"
-				"{\n"
-				"	gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);\n"
-				"}\0";
+
 
 		// Create an empty shader object
 		GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -98,15 +132,7 @@ private:
 			std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << info_log << std::endl;
 		}
 
-		// Fragment shader
-		// TODO(Ahura Jami): Move to a separate file.
-		const GLchar* fragment_shader_source =
-				"#version 330 core\n"
-				"out vec4 frag_color;\n"
-				"void main()\n"
-				"{\n"
-				"	frag_color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-				"}\n\0";
+
 
 		// Create and compile the fragment shader just like above vertex shader
 		GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -152,6 +178,9 @@ private:
 	* Vertex input in normalized device coordinates [-1, 1]
 	*/
 	float vertices[9];
+
+	const GLchar* vertex_shader_source;
+	const GLchar* fragment_shader_source;
 };
 
 #endif //ENGINE_TRIANGLE_H
