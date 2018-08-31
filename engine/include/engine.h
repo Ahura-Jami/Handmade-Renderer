@@ -4,6 +4,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <vector>
+
+#include "actor.h"
 
 class Engine
 {
@@ -19,15 +22,24 @@ public:
 	~Engine();
 
 	/**
-	 * Initializes the render loop and processes all rendering commands.
-	 */
-	void Render(GLuint shader_program, GLuint VAO);
-
-	/**
 	 * Initializes a GLFW window object
 	 * @return true if window is successfully created, false otherwise.
 	 */
 	bool Init();
+
+	/**
+	 * Initializes the render loop and processes all rendering commands.
+	 */
+	void Render();
+
+	/**
+	 * Register a renderable object that inherits from Actor
+	 * @param [in] actor An object that inherits from Actor
+	 */
+	void Register(const Actor& actor)
+	{
+		actors.emplace_back(actor);
+	}
 
 private:
 	/**
@@ -35,8 +47,6 @@ private:
 	 * Called when window is closed and render loop exists.
 	 */
 	void Destroy();
-
-
 
 	/**
 	 * A Callback function for windows resize event that gets executed whenever the size of the widnow
@@ -70,6 +80,10 @@ private:
 	 */
 	const unsigned int window_height = 600;
 
+	/**
+	 * List of registered renderable objects
+	 */
+	 std::vector<Actor> actors;
 };
 
 #endif

@@ -73,7 +73,7 @@ void Engine::ProcessInput()
 	}
 }
 
-void Engine::Render(GLuint shader_program, GLuint VAO)
+void Engine::Render()
 {
 	// Render loop
 	while(!glfwWindowShouldClose(window))
@@ -85,15 +85,20 @@ void Engine::Render(GLuint shader_program, GLuint VAO)
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		// draw our first triangle
-		// Activate the program and set it as current program to be used for subsequent drawing commands.
-		glUseProgram(shader_program);
+		for (const auto& actor : actors)
+		{
+			// Activate the program and set it as current program to be used for subsequent drawing commands.
+			glUseProgram(actor.shader_program);
 
-		// Bind vertex array object
-		glBindVertexArray(VAO);
+			// Bind vertex array object
+			glBindVertexArray(actor.vertex_array_object);
 
-		// draw the triangle
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+			// Call the draw command
+			actor.draw_function();
+
+			// Unbind the vertex array object
+			glBindVertexArray(0);
+		}
 
 		// Swap buffer and pull IO events (keys pressed/released, mouse moved, etc.)
 		glfwSwapBuffers(window);

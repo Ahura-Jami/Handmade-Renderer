@@ -6,6 +6,8 @@ project(Engine VERSION 0.0.1)
 # Add Source and header files
 #=======================================================================================================================
 list(APPEND ENGINE_HEADERS include/engine.h)
+list(APPEND ENGINE_HEADERS include/actor.h)
+
 list(APPEND ENGINE_SOURCES source/engine.cpp)
 
 #=======================================================================================================================
