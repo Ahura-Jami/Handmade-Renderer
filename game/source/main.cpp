@@ -25,6 +25,10 @@ int main()
 	auto rectangle = Rectangle();
 	engine->Register(rectangle);
 
+	// Enable wireframe mode
+	engine->ToggleWireframe();
+
+
 	// Render the registered actors
 	engine->Render();
 }

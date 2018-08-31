@@ -41,6 +41,34 @@ public:
 		actors.emplace_back(actor);
 	}
 
+	/**
+	 * Toggles the wireframe mode (initial wireframe mode is off)
+	 */
+	void ToggleWireframe()
+	{
+		// From OpenGL Doc: params returns two values: symbolic constants indicating whether front-facing and
+		// back-facing polygons are rasterized as points, lines, or filled polygons.
+		GLint polygon_mode[2];
+		glGetIntegerv(GL_POLYGON_MODE, polygon_mode);
+
+		switch(polygon_mode[0])
+		{
+			case GL_LINE:
+			{
+				// Wiremode is one, turn it off by switching back to fill mode.
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				break;
+			}
+
+			case GL_FILL:
+			{
+				// Wiremode is off, turn it on by switching to line mode.
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+				break;
+			}
+		}
+	}
+
 private:
 	/**
 	 * Deallocates all OpenGL's and GLFW's resources.
