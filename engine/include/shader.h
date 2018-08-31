@@ -49,7 +49,7 @@ private:
 	/**
 	 * Reads the shader file
 	 * @param [in] shader_path Path to GLSL shader file
-	 * @return Shader code as a C++ string
+	 * @return Shader code as a std::string
 	 * @exception Prints an error message if there was any error in reading the file
 	 */
 	std::string ReadShaderFile(const GLchar *shader_path) const;
@@ -69,6 +69,13 @@ private:
 	 * @param fragment Unsigned reference to the fragment shader
 	 */
 	GLuint LinkShaders(GLuint vertex, GLuint fragment);
+
+	/**
+	 * Utility function for checking shader compilation/linking errors.
+	 * @param [in] shader Unsigned reference to the shader
+	 * @param [in] shader_type Type of the shader as a std::string (valid values: "VERTEX", "FRAGMENT", "PROGRAM")
+	 */
+	void CheckCompileOrLinkErrors(GLuint shader, const std::string &type) const;
 
 public:
 	/**
