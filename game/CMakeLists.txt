@@ -6,6 +6,7 @@ cmake_minimum_required(VERSION 3.8.0)
 # Main Module
 list(APPEND SOURCE_FILES source/main.cpp)
 list(APPEND HEADER_FILES source/triangle.h)
+list(APPEND HEADER_FILES source/rectangle.h)
 
 mark_as_advanced(${SOURCE_FILES} ${HEADER_FILES})
 

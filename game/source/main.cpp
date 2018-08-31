@@ -4,6 +4,7 @@
 #include "engine.h"
 
 #include "triangle.h"
+#include "rectangle.h"
 
 int main()
 {
@@ -15,10 +16,14 @@ int main()
 		return -1;
 
 	// Create a custom 2d triangle actor
-	auto triangle = Triangle();
+//	auto triangle = Triangle();
 
 	// Register the triangle for engine to draw
-	engine->Register(triangle);
+//	engine->Register(triangle);
+
+//	// Create and register the custom 2D rectangle
+	auto rectangle = Rectangle();
+	engine->Register(rectangle);
 
 	// Render the registered actors
 	engine->Render();

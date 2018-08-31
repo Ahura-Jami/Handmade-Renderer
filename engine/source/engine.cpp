@@ -16,6 +16,14 @@ Engine::~Engine()
 
 void Engine::Destroy()
 {
+	// optional: de-allocate all resources once they've outlived their purpose:
+	for(auto& actor : actors)
+	{
+		glDeleteVertexArrays(1, &actor.vertex_array_object);
+		glDeleteBuffers(1, &actor.vertex_buffer_object);
+		glDeleteBuffers(1, &actor.element_buffer_object);
+	}
+
 	// terminate glfw to clear all previously allocated GLFW resources.
 	glfwTerminate();
 }

@@ -10,6 +10,8 @@ class Actor
 {
 public:
 	GLuint vertex_array_object;
+	GLuint vertex_buffer_object;
+	GLuint element_buffer_object;
 	GLuint shader_program;
 	std::function<void()> draw_function;
 };
