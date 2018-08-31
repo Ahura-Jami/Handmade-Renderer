@@ -21,7 +21,7 @@ public:
 	/**
 	 * Initializes the render loop and processes all rendering commands.
 	 */
-	void Render();
+	void Render(GLuint shader_program, GLuint VAO);
 
 	/**
 	 * Initializes a GLFW window object

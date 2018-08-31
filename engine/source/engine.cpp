@@ -32,7 +32,6 @@ bool Engine::Init()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-
 #ifdef __APPLE__
 	// addresses a compilation issue on OS X
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE)
@@ -74,9 +73,8 @@ void Engine::ProcessInput()
 	}
 }
 
-void Engine::Render()
+void Engine::Render(GLuint shader_program, GLuint VAO)
 {
-
 	// Render loop
 	while(!glfwWindowShouldClose(window))
 	{
@@ -86,6 +84,16 @@ void Engine::Render()
 		// Rendering facilities
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		// draw our first triangle
+		// Activate the program and set it as current program to be used for subsequent drawing commands.
+		glUseProgram(shader_program);
+
+		// Bind vertex array object
+		glBindVertexArray(VAO);
+
+		// draw the triangle
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		// Swap buffer and pull IO events (keys pressed/released, mouse moved, etc.)
 		glfwSwapBuffers(window);
