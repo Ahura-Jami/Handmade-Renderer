@@ -1,10 +1,8 @@
 #include "texture.h"
 
 #include <glad/glad.h>
-#include <stb/stb_image.h>
+#include <GLFW/glfw3.h>
 #include <string>
-#include <iostream>
-#include <texture.h>
 
 Texture2D::Texture2D(const GLubyte* image_data, int width, int height, int num_channels)
 {

@@ -3,6 +3,8 @@
 #include <iostream>
 #include <cmath>
 
+#include "resource-manager.h"
+
 Engine::Engine()
 {
 
@@ -15,6 +17,9 @@ Engine::~Engine()
 
 void Engine::Destroy()
 {
+	// Clear all textures and shaders
+	ResourceManager::Clear();
+
 	// optional: de-allocate all resources once they've outlived their purpose:
 	for(auto& actor : actors)
 	{

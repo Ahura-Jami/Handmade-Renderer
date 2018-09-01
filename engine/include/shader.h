@@ -2,7 +2,6 @@
 #define ENGINE_SHADER_H
 
 #include <glad/glad.h>
-
 #include <string>
 
 /** Shader class */
