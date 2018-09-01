@@ -8,8 +8,15 @@
 class Rectangle : public Actor
 {
 public:
-	Rectangle()
+	Rectangle(const float* in_vertices, Shader in_shader)
 	{
+		for (int i = 0; i < 32; ++i)
+		{
+			vertices[i] = in_vertices[i];
+		}
+
+		shader = in_shader;
+
 		Create();
 	}
 
@@ -20,14 +27,8 @@ private:
 	{
 		// Index drawing - we can draw a rectangle using two triangles and only 4 vertices.
 		// Vertex input in normalized device coordinates [-1, 1]
-		float vertices[] = {
-				 0.5f,  0.5f, 0.0f, // top right
-				 0.5f, -0.5f, 0.0f, // bottom right
-				-0.5f, -0.5f, 0.0f, // bottom left
-				-0.5f,  0.5f, 0.0f  // top left
-		};
 
-		// indices of above vertices that form the two separate triangles.
+		// indices of the vertices that form the two separate triangles.
 		unsigned int indices[] = {
 				0, 1, 2, // first triangle
 				0, 3, 2  // second triangle
@@ -60,8 +61,16 @@ private:
 		// Tell OpenGL how to interpret vertex data
 		// @NOTE: These two functions need to be called before binding a new buffer and
 		//		  not necessarily before releasing the currently bound buffer.
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
+
+		// Color attributes
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(1);
+
+		// Texture attributes
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+		glEnableVertexAttribArray(2);
 
 		// Release the buffers
 		// @NOTE This is allowed. The call to glVertexAttribPointer registered vertex_buffer_object as the vertex attribute's
@@ -87,85 +96,15 @@ private:
 		{
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		};
-
-		// vertex shader source code
-		// TODO(Ahura Jami): Move to a separate file.
-		const GLchar* vertex_shader_source =
-				"#version 330 core\n"
-				"layout (location = 0) in vec3 pos;\n"
-				"void main()\n"
-				"{\n"
-				"	gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);\n"
-				"}\0";
-
-		// Create an empty shader object
-		GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-
-		// Attach the source code to the newly created empty shader object
-		glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
-
-		// Compile the vertex shader
-		glCompileShader(vertex_shader);
-
-		// Check whether the compilation was successfull
-		GLint success;
-		glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
-
-		if (!success)
-		{
-			GLchar info_log[512];
-			glGetShaderInfoLog(vertex_shader, 512, NULL, info_log);
-			std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << info_log << std::endl;
-		}
-
-		// Fragment shader
-		// TODO(Ahura Jami): Move to a separate file.
-		const GLchar* fragment_shader_source =
-				"#version 330 core\n"
-				"out vec4 frag_color;\n"
-				"void main()\n"
-				"{\n"
-				"	frag_color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-				"}\n\0";
-
-		// Create and compile the fragment shader just like above vertex shader
-		GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-		glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
-		glCompileShader(fragment_shader);
-
-		glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
-		if (!success)
-		{
-			GLchar info_log[512];
-			glGetShaderInfoLog(fragment_shader, 512, NULL, info_log);
-			std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << info_log << std::endl;
-		}
-
-		// Link the compiled shaders into a shader program that can be used for rendering
-		// 1. Create shader program
-		shader_program = glCreateProgram();
-
-		// 2. Attach the compiled shaders to the program
-		glAttachShader(shader_program, vertex_shader);
-		glAttachShader(shader_program, fragment_shader);
-
-		// 3. Link the attached shaders to each other
-		glLinkProgram(shader_program);
-
-		// Check if the linking was successfull
-		glGetProgramiv(shader_program, GL_LINK_STATUS, &success);
-		if (!success)
-		{
-			GLchar info_log[512];
-			glGetProgramInfoLog(fragment_shader, 512, NULL, info_log);
-			std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << info_log << std::endl;
-		}
-
-		// Delete the created shaders as they're no longer needed (since they're
-		// already compiled and linked to the program).
-		glDeleteShader(vertex_shader);
-		glDeleteShader(fragment_shader);
 	}
+
+private:
+	/**
+	 * Container holding vertices coordinates, their corresponding color and texture coordinates
+	 * A rectangle has 4 vertices, each vertex has 3 coordinates xyz, 3 color values rgb, 2 texture values st
+	 * => 32 = 4 * (3 + 3 + 2);
+	*/
+	float vertices[32];
 };
 
 

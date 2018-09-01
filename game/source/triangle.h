@@ -75,15 +75,11 @@ private:
 		};
 	}
 
-public:
-	void SetTexture(GLuint in_texture)
-	{
-		texture = in_texture;
-	}
-
 private:
 	/**
-	* Vertex input in normalized device coordinates [-1, 1]
+	 * Container holding vertices coordinates, their corresponding color and texture coordinates
+	 * A triangle has 3 vertices, each vertex has 3 coordinates xyz, 3 color values rgb, 2 texture values st
+	 * => 24 = 3 * (3 + 3 + 2);
 	*/
 	float vertices[24]{};
 

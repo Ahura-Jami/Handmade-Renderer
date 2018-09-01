@@ -11,6 +11,11 @@ class Actor
 public:
 	Actor() = default;
 
+	void SetTexture(GLuint in_texture)
+	{
+		texture = in_texture;
+	}
+
 	GLuint vertex_array_object{};
 	GLuint vertex_buffer_object{};
 	GLuint element_buffer_object{};

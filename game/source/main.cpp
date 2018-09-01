@@ -6,6 +6,7 @@
 #include "stb/stb_image.h"
 
 #include "triangle.h"
+#include "rectangle.h"
 
 int main()
 {
@@ -21,8 +22,6 @@ int main()
 	std::string fragment_path = std::string(PROJECT_DIR) + "/game/shaders/triangle_shader.frag";
 	Shader triangle_shader = Shader(vertex_path.c_str(), fragment_path.c_str());
 
-
-
 	// Generate the texture
 	GLuint texture;
 	glGenTextures(1, &texture);
@@ -37,7 +36,7 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	// Load the texture
-	std::string texture_path = std::string(PROJECT_DIR) + "/game/textures/wall.jpg";
+	std::string texture_path = std::string(PROJECT_DIR) + "/game/textures/wooden-container.jpg";
 	int width, height, num_channels;
 	GLubyte* texture_data = stbi_load(texture_path.c_str(), &width, &height, &num_channels, 0);
 
@@ -56,19 +55,30 @@ int main()
 	// Free the image memory
 	stbi_image_free(texture_data);
 
+	// Create triangle
 	// Define vertices and their appropriate data
-	float vertices[] = {
+	float triangle_vertices[] = {
 			-0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,	0.0f, 0.0f, // bottom left
 			 0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,	1.0f, 0.0f, // bottom right
 			 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,	0.5f, 1.0f  // top
 	};
-
-	auto triangle = Triangle(vertices, triangle_shader);
+	auto triangle = Triangle(triangle_vertices, triangle_shader);
 
 	// Pass the texture to the triangle
 	triangle.SetTexture(texture);
-
 	engine->Register(triangle);
+
+	// Create rectangle
+	float rectangle_vertices[] = {
+			// positions          // colors           // texture coords
+			 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+			 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+			-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+			-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left
+	};
+	auto rectangle = Rectangle(rectangle_vertices, triangle_shader);
+	rectangle.SetTexture(texture);
+	engine->Register(rectangle);
 
 	// Enable wireframe mode
 //	engine->ToggleWireframe();
