@@ -67,7 +67,7 @@ GLuint Texture::GenerateTexture2D(const TextureInfo& texture_info)
 			texture_info.width,
 			texture_info.height,
 			0,
-			GL_RGB,
+			texture_info.num_channels == 3 ? GL_RGB : GL_RGBA,
 			GL_UNSIGNED_BYTE,
 			texture_info.data);
 
