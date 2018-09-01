@@ -25,13 +25,13 @@ int main()
 			PROJECT_DIR + std::string("/game/shaders/triangle_shader.frag")); // fragment shader
 
 	// Load the texture
-	auto wood_texture = std::make_shared<Texture>(
+	auto wood_texture = std::make_shared<Texture2D>(
 			PROJECT_DIR + std::string("/game/textures/wooden-container.jpg"));
 
-	auto wall_texture = std::make_shared<Texture>(
+	auto wall_texture = std::make_shared<Texture2D>(
 			PROJECT_DIR + std::string("/game/textures/wall.jpg"));
 
-	auto smiley_texture = std::make_shared<Texture>(
+	auto smiley_texture = std::make_shared<Texture2D>(
 			PROJECT_DIR + std::string("/game/textures/awesomeface.png"));
 
 	// Create rectangle

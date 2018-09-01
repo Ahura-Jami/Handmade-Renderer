@@ -20,6 +20,7 @@ set(CMAKE_LEGACY_CYGWIN_WIN32 OFF)
 #=======================================================================================================================
 add_subdirectory(engine)
 add_subdirectory(game)
+add_subdirectory(breakout)
 
 
 

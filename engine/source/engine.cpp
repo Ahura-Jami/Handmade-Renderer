@@ -93,7 +93,7 @@ void Engine::Render()
 		// to its specific uniform in the fragment shader.
 		for (int id = 0; id < actor.texture.size(); ++id)
 		{
-			actor.shader->SetInt("texture" + std::to_string(id), id);
+			actor.shader->SetInteger(("texture" + std::to_string(id)).c_str(), id);
 		}
 	}
 
@@ -117,7 +117,7 @@ void Engine::Render()
 			{
 				// Activate the texture unit first before binding texture
 				glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + id));
-				glBindTexture(GL_TEXTURE_2D, actor.texture[id]->GetTextureReference());
+				actor.texture[id]->Bind();
 			}
 			// Bind vertex array object
 			glBindVertexArray(actor.vertex_array_object);

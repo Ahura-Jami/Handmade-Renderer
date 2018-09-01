@@ -5,6 +5,7 @@
 
 #include <string>
 
+/** Shader class */
 class Shader
 {
 public:
@@ -15,33 +16,40 @@ public:
 	 * @param [in] vertex_path Absolute path to the vertex shader file
 	 * @param [in] fragment_path Absolute path to the fragment shader file
 	 */
-	Shader(const std::string& vertex_path, const std::string& fragment_path);
+	Shader(const std::string& vertex_path, const std::string& fragment_path, const std::string& geometry_path = "");
 
 	/**
 	 * Use/activate the shader program
+	 * @return
 	 */
-	void Use();
+	Shader& Use();
 
+	///@{
 	/**
-	 * Queries a uniform location and sets its value as a bool
-	 * @param [in] name Name of the uniform as std::string
-	 * @param [in] value Value of the uniform as bool
+	 * Queries a uniform location and sets its value
+	 * @param [in] name Name of the uniform
+	 * @param [in] value Value of the uniform
 	 */
-	void SetBool(const std::string& name, bool value) const;
+	void SetBool	(const GLchar* name, GLboolean value) const;
+	void SetInteger	(const GLchar* name, GLint 	   value) const;
+	void SetFloat	(const GLchar* name, GLfloat   value) const;
+//	void SetVector2f(const GLchar* name, GLfloat   value) const;
+//	void SetVector3f(const GLchar* name, GLfloat   value) const;
+//	void SetVector4f(const GLchar* name, GLfloat   value) const;
+//	void SetMatrix4	(const GLchar* name, GLfloat   value) const;
+	///@}
+//
+//	///@{
+//	/**
+//	 * Queries a uniform location and sets its value
+//	 * @param [in] name Name of the uniform
+//	 * @param [in] x
+//	 */
+//	void SetVector2f(const std::string& name, float value,) const;
+//	void SetVector3f(const std::string& name, float value,) const;
+//	void SetVector4f(const std::string& name, float value,) const;
+//	///@}
 
-	/**
-	 * Queries a uniform location and sets its value as an int
-	 * @param [in] name Name of the uniform as std::string
-	 * @param [in] value Value of the uniform as int
-	 */
-	void SetInt(const std::string& name, int value) const;
-
-	/**
-	 * Queries a uniform location and sets its value as an float
-	 * @param [in] name Name of the uniform as std::string
-	 * @param [in] value Value of the uniform as float
-	 */
-	void SetFloat(const std::string& name, float value) const;
 
 private:
 
@@ -67,7 +75,7 @@ private:
 	 * @param vertex Unsigned reference to the vertex shader
 	 * @param fragment Unsigned reference to the fragment shader
 	 */
-	GLuint LinkShaders(GLuint vertex, GLuint fragment);
+	GLuint LinkShaders(GLuint vertex, GLuint fragment, GLuint geometry = 0) const;
 
 	/**
 	 * Utility function for checking shader compilation/linking errors.
@@ -78,16 +86,10 @@ private:
 
 public:
 	/**
-	 * Get a reference to the shader program
-	 * @return An unsigned int reference to the shader program
-	 */
-	GLuint GetShaderProgram() const { return shader_program; }
-
-private:
-	/**
 	 * The id of the shader program
 	 */
-	GLuint shader_program;
+	GLuint id;
 };
 
-#endif //ENGINE_SHADER_H
+#endif // ENGINE_SHADER_H
+

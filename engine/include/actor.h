@@ -18,7 +18,7 @@ public:
 	 * @param in_texture 
 	 * @param actor 
 	 */
-	void AddTexture(const std::shared_ptr<Texture> &texture_ptr)
+	void AddTexture(const std::shared_ptr<Texture2D> &texture_ptr)
 	{
 		texture.emplace_back(texture_ptr);
 	}
@@ -32,7 +32,7 @@ public:
 	GLuint vertex_buffer_object{};
 	GLuint element_buffer_object{};
 
-	std::vector<std::shared_ptr<Texture>> texture;
+	std::vector<std::shared_ptr<Texture2D>> texture;
 
 	std::shared_ptr<Shader> shader;
 

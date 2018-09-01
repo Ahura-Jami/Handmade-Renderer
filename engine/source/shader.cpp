@@ -7,7 +7,7 @@
 #include <iostream>
 #include <shader.h>
 
-Shader::Shader(const std::string& vertex_path, const std::string& fragment_path)
+Shader::Shader(const std::string& vertex_path, const std::string& fragment_path, const std::string& geometry_path)
 {
 	// Read vertex and fragment shaders files
 	std::string vertex_code = ReadShaderFile(vertex_path.c_str());
@@ -17,12 +17,34 @@ Shader::Shader(const std::string& vertex_path, const std::string& fragment_path)
 	GLuint vertex = CreateAndCompileShader(GL_VERTEX_SHADER, vertex_code);
 	GLuint fragment = CreateAndCompileShader(GL_FRAGMENT_SHADER, fragment_code);
 
-	// Link shaders to the class member "shader_program"
-	shader_program = LinkShaders(vertex, fragment);
+	// Create and compile geometry shader if given
+	if (geometry_path != "")
+	{
+		std::string geometry_code = ReadShaderFile(geometry_path.c_str());
+		GLuint geometry = CreateAndCompileShader(GL_GEOMETRY_SHADER, geometry_code);
+
+		// link all 3 shaders to the program
+		id = LinkShaders(vertex, fragment, geometry);
+
+		// Delete the geometry shader here
+		glDeleteShader(geometry);
+	}
+	else
+	{
+		// no geometry shader provided, just link vertex and fragment shaders to the program
+		id = LinkShaders(vertex, fragment);
+	}
 
 	// Delete the shaders as they're linked into our program now and are no longer needed.
 	glDeleteShader(vertex);
 	glDeleteShader(fragment);
+}
+
+
+Shader& Shader::Use()
+{
+	glUseProgram(id);
+	return *this;
 }
 
 
@@ -66,6 +88,31 @@ std::string Shader::ReadShaderFile(const GLchar *shader_path) const
 
 GLuint Shader::CreateAndCompileShader(GLenum shader_type, const std::string &shader_code) const
 {
+	// Get the name of the shader base on the input shader type to be used for error checking
+	std::string shader_type_str;
+	switch(shader_type)
+	{
+		default:
+		{
+			std::cout << "Invalid input shader type." << std::endl;
+			return 0;
+		}
+		case GL_VERTEX_SHADER:
+		{
+			shader_type_str = "VERTEX";
+			break;
+		}
+		case GL_FRAGMENT_SHADER:
+		{
+			shader_type_str = "FRAGMENT";
+			break;
+		}
+		case GL_GEOMETRY_SHADER:
+		{
+			shader_type_str = "GEOMETRY";
+		}
+	}
+
 	// Create the shader
 	GLuint shader = glCreateShader(shader_type);
 
@@ -77,14 +124,15 @@ GLuint Shader::CreateAndCompileShader(GLenum shader_type, const std::string &sha
 	glCompileShader(shader);
 
 	// Check for compile errors if any
-	CheckCompileOrLinkErrors(shader, shader_type == GL_VERTEX_SHADER ? "VERTEX" : "FRAGMENT");
+
+	CheckCompileOrLinkErrors(shader, shader_type_str);
 
 	// return the reference to the created and compiled shader
 	return shader;
 }
 
 
-GLuint Shader::LinkShaders(GLuint vertex, GLuint fragment)
+GLuint Shader::LinkShaders(GLuint vertex, GLuint fragment, GLuint geometry) const
 {
 	// Create the shader program
 	GLuint program = glCreateProgram();
@@ -92,6 +140,12 @@ GLuint Shader::LinkShaders(GLuint vertex, GLuint fragment)
 	// attach and link the vertex and fragment shaders
 	glAttachShader(program, vertex);
 	glAttachShader(program, fragment);
+
+	if (geometry != 0)
+	{
+		glAttachShader(program, geometry);
+	}
+
 	glLinkProgram(program);
 
 	// print linking errors if any
@@ -99,30 +153,6 @@ GLuint Shader::LinkShaders(GLuint vertex, GLuint fragment)
 
 	// return the reference to the created shader program
 	return program;
-}
-
-
-void Shader::Use()
-{
-	glUseProgram(shader_program);
-}
-
-
-void Shader::SetBool(const std::string &name, bool value) const
-{
-	glUniform1i(glGetUniformLocation(shader_program, name.c_str()), static_cast<int>(value));
-}
-
-
-void Shader::SetInt(const std::string &name, int value) const
-{
-	glUniform1i(glGetUniformLocation(shader_program, name.c_str()), value);
-}
-
-
-void Shader::SetFloat(const std::string &name, float value) const
-{
-	glUniform1f(glGetUniformLocation(shader_program, name.c_str()), value);
 }
 
 
@@ -151,4 +181,22 @@ void Shader::CheckCompileOrLinkErrors(GLuint shader, const std::string &type) co
 			std::cout << "--------------------------------------------------------" << std::endl;
 		}
 	}
+}
+
+
+void Shader::SetBool(const GLchar* name, GLboolean value) const
+{
+	glUniform1i(glGetUniformLocation(id, name), static_cast<int>(value));
+}
+
+
+void Shader::SetInteger(const GLchar* name, int value) const
+{
+	glUniform1i(glGetUniformLocation(id, name), value);
+}
+
+
+void Shader::SetFloat(const GLchar* name, float value) const
+{
+	glUniform1f(glGetUniformLocation(id, name), value);
 }
