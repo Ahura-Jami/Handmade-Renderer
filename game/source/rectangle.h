@@ -8,14 +8,12 @@
 class Rectangle : public Actor
 {
 public:
-	Rectangle(const float* in_vertices, Shader in_shader)
+	Rectangle(const float* in_vertices)
 	{
 		for (int i = 0; i < 32; ++i)
 		{
 			vertices[i] = in_vertices[i];
 		}
-
-		shader = in_shader;
 
 		Create();
 	}

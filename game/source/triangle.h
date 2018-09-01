@@ -9,14 +9,12 @@
 class Triangle : public Actor
 {
 public:
-	Triangle(const float* in_vertices, Shader in_shader)
+	Triangle(const float* in_vertices)
 	{
 		for (int i = 0; i < 24; ++i)
 		{
 			vertices[i] = in_vertices[i];
 		}
-
-		shader = in_shader;
 
 		Create();
 	}

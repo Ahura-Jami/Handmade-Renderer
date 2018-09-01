@@ -13,6 +13,11 @@ list(APPEND ENGINE_HEADERS include/actor.h)
 list(APPEND ENGINE_HEADERS include/shader.h)
 list(APPEND ENGINE_SOURCES source/shader.cpp)
 
+list(APPEND ENGINE_HEADERS include/texture.h)
+list(APPEND ENGINE_SOURCES source/texture.cpp)
+
+
+
 
 #=======================================================================================================================
 # Define the target and add all source and header files to it

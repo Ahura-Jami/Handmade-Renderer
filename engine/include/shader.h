@@ -4,7 +4,6 @@
 #include <glad/glad.h>
 
 #include <string>
-#include <ostream>
 
 class Shader
 {
@@ -13,10 +12,10 @@ public:
 
 	/**
 	 * [Constructor] Reads and builds the shader
-	 * @param [in] vertex_path Path to the source code of vertex shader
-	 * @param [in] fragment_path Path to the source code of fragment shader
+	 * @param [in] vertex_path Absolute path to the vertex shader file
+	 * @param [in] fragment_path Absolute path to the fragment shader file
 	 */
-	Shader(const GLchar* vertex_path, const GLchar* fragment_path);
+	Shader(const std::string& vertex_path, const std::string& fragment_path);
 
 	/**
 	 * Use/activate the shader program

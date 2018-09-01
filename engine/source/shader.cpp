@@ -7,11 +7,11 @@
 #include <iostream>
 #include <shader.h>
 
-Shader::Shader(const GLchar *vertex_path, const GLchar *fragment_path)
+Shader::Shader(const std::string& vertex_path, const std::string& fragment_path)
 {
 	// Read vertex and fragment shaders files
-	std::string vertex_code = ReadShaderFile(vertex_path);
-	std::string fragment_code = ReadShaderFile(fragment_path);
+	std::string vertex_code = ReadShaderFile(vertex_path.c_str());
+	std::string fragment_code = ReadShaderFile(fragment_path.c_str());
 
 	// Create and compile vertex and fragment shaders
 	GLuint vertex = CreateAndCompileShader(GL_VERTEX_SHADER, vertex_code);
