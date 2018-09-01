@@ -11,7 +11,7 @@ class Triangle : public Actor
 public:
 	Triangle(const float* in_vertices, Shader in_shader)
 	{
-		for (int i = 0; i < 18; ++i)
+		for (int i = 0; i < 24; ++i)
 		{
 			vertices[i] = in_vertices[i];
 		}
@@ -49,12 +49,16 @@ private:
 		// @NOTE: These two functions need to be called before binding a new buffer and
 		//		  not necessarily before releasing the currently bound buffer.
 		// Vertex layout
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
 
 		// Color layout
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 		glEnableVertexAttribArray(1);
+
+		// 2D texture layout
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+		glEnableVertexAttribArray(2);
 
 		// Release the buffer target
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -71,11 +75,17 @@ private:
 		};
 	}
 
+public:
+	void SetTexture(GLuint in_texture)
+	{
+		texture = in_texture;
+	}
+
 private:
 	/**
 	* Vertex input in normalized device coordinates [-1, 1]
 	*/
-	float vertices[18]{};
+	float vertices[24]{};
 
 };
 

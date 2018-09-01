@@ -17,8 +17,7 @@ list(APPEND ENGINE_SOURCES source/shader.cpp)
 #=======================================================================================================================
 # Define the target and add all source and header files to it
 #=======================================================================================================================
-add_library(Engine STATIC ${ENGINE_HEADERS} ${ENGINE_SOURCES}
-        thirdparty/glad/src/glad.c)
+add_library(Engine STATIC ${ENGINE_HEADERS} ${ENGINE_SOURCES})
 
 #Add an alias so that library can be used inside the build tree, e.g. when testing
 add_library(Engine::Engine ALIAS Engine)
@@ -62,7 +61,11 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "Build the GLFW test programs" FORCE)
 
 # GLAD
 target_include_directories(Engine PUBLIC thirdparty/glad/include)
-#target_sources(Engine PRIVATE thirdparty/glad/src/glad.c)
+target_sources(Engine PRIVATE thirdparty/glad/src/glad.c)
+
+# STB_IMAGE
+target_include_directories(Engine PUBLIC thirdparty/stb/include)
+target_sources(Engine PRIVATE thirdparty/stb/src/stb_image.cpp)
 
 #=======================================================================================================================
 # Enable unit tests

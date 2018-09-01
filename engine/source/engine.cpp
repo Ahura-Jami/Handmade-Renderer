@@ -97,6 +97,8 @@ void Engine::Render()
 			// Activate the program and set it as current program to be used for subsequent drawing commands.
 			glUseProgram(actor.shader.GetShaderProgram());
 
+			glBindTexture(GL_TEXTURE_2D, actor.texture);
+
 			// Bind vertex array object
 			glBindVertexArray(actor.vertex_array_object);
 
