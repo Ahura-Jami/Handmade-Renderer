@@ -18,23 +18,23 @@ public:
 	 * @param in_texture 
 	 * @param actor 
 	 */
-	void AddTexture(const std::shared_ptr<Texture2D> &texture_ptr)
+	void AddTexture(Texture2D texture)
 	{
-		texture.emplace_back(texture_ptr);
+		this->textures.emplace_back(texture);
 	}
 
-	void SetShader(const std::shared_ptr<Shader>& shader_ptr)
+	void SetShader(Shader shader)
 	{
-		shader = shader_ptr;
+		this->shader = shader;
 	}
 
 	GLuint vertex_array_object{};
 	GLuint vertex_buffer_object{};
 	GLuint element_buffer_object{};
 
-	std::vector<std::shared_ptr<Texture2D>> texture;
+	std::vector<Texture2D> textures;
 
-	std::shared_ptr<Shader> shader;
+	Shader shader;
 
 	std::function<void()> draw_function;
 };

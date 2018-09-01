@@ -16,6 +16,8 @@ list(APPEND ENGINE_SOURCES source/shader.cpp)
 list(APPEND ENGINE_HEADERS include/texture.h)
 list(APPEND ENGINE_SOURCES source/texture.cpp)
 
+list(APPEND ENGINE_HEADERS include/resource-manager.h)
+list(APPEND ENGINE_SOURCES source/resource-manager.cpp)
 
 
 

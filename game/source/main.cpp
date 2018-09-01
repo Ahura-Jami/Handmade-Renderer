@@ -1,6 +1,7 @@
 #include <iostream>
 #include <memory>
 #include <cstring>
+#include <resource-manager.h>
 
 #include "engine.h"
 
@@ -20,19 +21,27 @@ int main()
 		return -1;
 
 	// Load the shaders
-	auto shader = std::make_shared<Shader>(
+	auto shader = ResourceManager::LoadShader(
+			"triangle",
 			PROJECT_DIR + std::string("/game/shaders/triangle_shader.vert"), // vertex shader
-			PROJECT_DIR + std::string("/game/shaders/triangle_shader.frag")); // fragment shader
+			PROJECT_DIR + std::string("/game/shaders/triangle_shader.frag") // fragment shader
+	);
 
-	// Load the texture
-	auto wood_texture = std::make_shared<Texture2D>(
-			PROJECT_DIR + std::string("/game/textures/wooden-container.jpg"));
+	// Load all the textures
+	auto wood_texture = ResourceManager::LoadTexture(
+			"wood",
+			PROJECT_DIR + std::string("/game/textures/wooden-container.jpg")
+	);
 
-	auto wall_texture = std::make_shared<Texture2D>(
-			PROJECT_DIR + std::string("/game/textures/wall.jpg"));
+	auto wall_texture = ResourceManager::LoadTexture(
+			"wall",
+			PROJECT_DIR + std::string("/game/textures/wall.jpg")
+	);
 
-	auto smiley_texture = std::make_shared<Texture2D>(
-			PROJECT_DIR + std::string("/game/textures/awesomeface.png"));
+	auto smiley_texture = ResourceManager::LoadTexture(
+			"smiley",
+			PROJECT_DIR + std::string("/game/textures/awesomeface.png")
+	);
 
 	// Create rectangle
 	// Define vertices and their appropriate data

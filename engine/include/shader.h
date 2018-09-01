@@ -13,16 +13,16 @@ public:
 
 	/**
 	 * [Constructor] Reads and builds the shader
-	 * @param [in] vertex_path Absolute path to the vertex shader file
-	 * @param [in] fragment_path Absolute path to the fragment shader file
+	 * @param [in] vertex_code Absolute path to the vertex shader file
+	 * @param [in] fragment_code Absolute path to the fragment shader file
 	 */
-	Shader(const std::string& vertex_path, const std::string& fragment_path, const std::string& geometry_path = "");
+	Shader(const std::string& vertex_code, const std::string& fragment_code, const std::string& geometry_code = "");
 
 	/**
 	 * Use/activate the shader program
 	 * @return
 	 */
-	Shader& Use();
+	void Use();
 
 	///@{
 	/**
@@ -52,15 +52,6 @@ public:
 
 
 private:
-
-	/**
-	 * Reads the shader file
-	 * @param [in] shader_path Path to GLSL shader file
-	 * @return Shader code as a std::string
-	 * @exception Prints an error message if there was any error in reading the file
-	 */
-	std::string ReadShaderFile(const GLchar *shader_path) const;
-
 	/**
 	 * Creates and compile a shader of input shader_type and
 	 * @param shader_type Type of the shader to be created and compiled

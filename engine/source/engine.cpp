@@ -85,15 +85,15 @@ void Engine::Render()
 	// Tell OpenGL to which texture unit each shader sampler belongs to by setting
 	// each sampler using glUniform1i. We only have to set this once, so we can do
 	// this before we enter the render loop
-	for (const auto& actor : actors)
+	for (auto& actor : actors)
 	{
-		actor.shader->Use();
+		actor.shader.Use();
 
 		// The id of texture which allows for the texture to be mapped
 		// to its specific uniform in the fragment shader.
-		for (int id = 0; id < actor.texture.size(); ++id)
+		for (int id = 0; id < actor.textures.size(); ++id)
 		{
-			actor.shader->SetInteger(("texture" + std::to_string(id)).c_str(), id);
+			actor.shader.SetInteger(("texture" + std::to_string(id)).c_str(), id);
 		}
 	}
 
@@ -107,17 +107,17 @@ void Engine::Render()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		for (const auto& actor : actors)
+		for (auto& actor : actors)
 		{
 			// Activate the program and set it as current program to be used for subsequent drawing commands.
-			actor.shader->Use();
+			actor.shader.Use();
 
 			// Loop over the textures and bind them each
-			for (int id = 0; id < actor.texture.size(); ++id)
+			for (int id = 0; id < actor.textures.size(); ++id)
 			{
 				// Activate the texture unit first before binding texture
 				glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + id));
-				actor.texture[id]->Bind();
+				actor.textures[id].Bind();
 			}
 			// Bind vertex array object
 			glBindVertexArray(actor.vertex_array_object);

@@ -5,22 +5,18 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <shader.h>
 
-Shader::Shader(const std::string& vertex_path, const std::string& fragment_path, const std::string& geometry_path)
+Shader::Shader(const std::string& vertex_code,
+			   const std::string& fragment_code,
+			   const std::string& geometry_code)
 {
-	// Read vertex and fragment shaders files
-	std::string vertex_code = ReadShaderFile(vertex_path.c_str());
-	std::string fragment_code = ReadShaderFile(fragment_path.c_str());
-
 	// Create and compile vertex and fragment shaders
 	GLuint vertex = CreateAndCompileShader(GL_VERTEX_SHADER, vertex_code);
 	GLuint fragment = CreateAndCompileShader(GL_FRAGMENT_SHADER, fragment_code);
 
 	// Create and compile geometry shader if given
-	if (geometry_path != "")
+	if (not geometry_code.empty())
 	{
-		std::string geometry_code = ReadShaderFile(geometry_path.c_str());
 		GLuint geometry = CreateAndCompileShader(GL_GEOMETRY_SHADER, geometry_code);
 
 		// link all 3 shaders to the program
@@ -41,48 +37,10 @@ Shader::Shader(const std::string& vertex_path, const std::string& fragment_path,
 }
 
 
-Shader& Shader::Use()
+void Shader::Use()
 {
 	glUseProgram(id);
-	return *this;
-}
-
-
-std::string Shader::ReadShaderFile(const GLchar *shader_path) const
-{
-	// shader code to be filled and returned
-	std::string shader_code;
-
-	// Retrieve the shader source from the input file path
-	std::ifstream shader_file;
-
-	// ensure ifstream objects can throw exceptions
-	shader_file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-
-	try
-	{
-		// open files
-		shader_file.open(shader_path);
-
-		// Read file's buffer contents into the stream
-		std::stringstream shader_string_stream;
-		shader_string_stream << shader_file.rdbuf();
-
-		// close file handler
-		shader_file.close();
-
-		// convert stream into string
-		shader_code = shader_string_stream.str();
-	}
-	catch (std::ifstream::failure& e)
-	{
-		std::cout << "ERROR::SHADER::FAILED_READING_FILE" << std::endl;
-		std::cout << "error: failed reading the file: " << shader_path << std::endl;
-		std::cout << "--------------------------------------------------------" << std::endl;
-	}
-
-	// Return the shader_code
-	return shader_code;
+//	return *this;
 }
 
 

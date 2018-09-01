@@ -44,11 +44,13 @@ struct TextureData
 class Texture2D
 {
 public:
+	Texture2D() = default;
+
 	/**
 	 * (Constructor) Creates a texture object from input texture file
 	 * @param [in] texture_path Absolute path to the texture file
 	 */
-	Texture2D(const std::string& texture_path);
+	Texture2D(const GLubyte* image_data, int width, int height, int num_channels);
 
 	/**
 	 * Binds this texture to be used and rendered
@@ -56,19 +58,12 @@ public:
 	void Bind() const;
 
 private:
-	/**
-	 * Loads the texture file
-	 * @param [in] texture_path Absolute path to the texture file
-	 * @param [out] texture_info A pointer to TextureInfo struct that will contain the loaded texture information
-	 */
-	GLubyte* LoadTextureFile(const std::string& texture_path);
 
 	/**
 	 * Generates and binds a 2D texture object from the loaded texture
 	 * @param [in] texture_info Loaded texture information
-	 * @return A reference to the generated 2D texture
 	 */
-	GLuint GenerateTexture2D(const GLubyte* image_data);
+	void GenerateTexture2D(const GLubyte* image_data);
 
 public:
 	/**
