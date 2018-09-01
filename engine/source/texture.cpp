@@ -27,6 +27,9 @@ Texture::Texture(const std::string &texture_path)
 
 void Texture::LoadTextureFile(const std::string& texture_path, TextureInfo* texture_info) const
 {
+	// flip the y access to comply with OpenGL representation
+	stbi_set_flip_vertically_on_load(true);
+
 	// Load the texture file
 	texture_info->data = stbi_load(
 			texture_path.c_str(),
