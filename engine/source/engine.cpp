@@ -127,14 +127,16 @@ void Engine::Render()
 
 		for (auto& actor : actors)
 		{
+			// Call actor's tick function
+			actor.Tick();
+
 			// Activate the program and set it as current program to be used for subsequent drawing commands.
 			actor.shader.Use();
 
-			// Processes the transformations
+						// Processes the transformations
 			glm::mat4 view = glm::mat4(1.0f);
 			view = glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f));
 
-			actor.SetWorldRotation(glfwGetTime() * 20.0f, glfwGetTime() * 10.0f, 0.0f);
 			actor.shader.SetMatrix4("transform", projection_matrix * view * actor.GetModelMatrix());
 
 			// Loop over the textures and bind them each

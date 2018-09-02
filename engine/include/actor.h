@@ -2,10 +2,11 @@
 #define ENGINE_ACTOR_H
 
 #include <glad/glad.h>
-#include <functional>
-#include <memory>
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <functional>
+#include <memory>
 
 #include "shader.h"
 #include "texture.h"
@@ -14,6 +15,13 @@ class Actor
 {
 public:
 	Actor() = default;
+
+	void Tick()
+	{
+		float delta_time = glfwGetTime();
+
+		SetWorldRotation(delta_time * 20.0f, delta_time * 10.0f, 0.0f);
+	}
 
 	/**
 	 * Transfer the ownership of the texture to
