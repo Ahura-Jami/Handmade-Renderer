@@ -8,6 +8,19 @@
 
 #include "resource_manager.h"
 
+// camera variables
+// TODO(Ahura): Move these to camera class
+glm::vec3 camera_pos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 camera_up = glm::vec3(0.0f, 1.0f, 0.0f);
+
+// Global variables to calculate delta time
+/** Time between current frame and last frame */
+float delta_time = 0.0f;
+
+/** Time of last frame */
+float time_last_frame = 0.0f;
+
 Engine::Engine()
 {
 
@@ -86,6 +99,28 @@ void Engine::ProcessInput()
 	{
 		glfwSetWindowShouldClose(window, true);
 	}
+
+	// TODO(Ahura): Move to camera class
+	float camera_speed = 2.5f * delta_time;
+	if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		camera_pos += camera_speed * camera_front;
+	}
+
+	if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		camera_pos -= camera_speed * camera_front;
+	}
+
+	if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		camera_pos -= glm::normalize(glm::cross(camera_front, camera_up)) * camera_speed;
+	}
+
+	if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		camera_pos += glm::normalize(glm::cross(camera_front, camera_up)) * camera_speed;
+	}
 }
 
 void Engine::Render()
@@ -115,27 +150,29 @@ void Engine::Render()
 		}
 	}
 
+
+
 	// Render loop
 	while(!glfwWindowShouldClose(window))
 	{
-		// User inputs
-		ProcessInput();
-
 		// Rendering facilities
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		// User inputs
+		ProcessInput();
+
+		// camera variables
+		// TODO(Ahura): Move these to camera class
+		glm::mat4 view = glm::lookAt(camera_pos, camera_pos + camera_front, camera_up);
+
 		for (auto& actor : actors)
 		{
 			// Call actor's tick function
-			actor.Tick();
+			actor.Tick(delta_time);
 
 			// Activate the program and set it as current program to be used for subsequent drawing commands.
 			actor.shader.Use();
-
-						// Processes the transformations
-			glm::mat4 view = glm::mat4(1.0f);
-			view = glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f));
 
 			actor.shader.SetMatrix4("transform", projection_matrix * view * actor.GetModelMatrix());
 
@@ -162,6 +199,11 @@ void Engine::Render()
 		// Swap buffer and pull IO events (keys pressed/released, mouse moved, etc.)
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+
+		// Processes delta time
+		float time_current_frame = glfwGetTime();
+		delta_time = time_current_frame - time_last_frame;
+		time_last_frame = time_current_frame;
 	}
 
 	// Destroy and delete all allocated opengl and glfw resources

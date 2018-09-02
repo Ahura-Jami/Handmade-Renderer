@@ -16,11 +16,11 @@ class Actor
 public:
 	Actor() = default;
 
-	void Tick()
+	void Tick(float delta_time)
 	{
-		float delta_time = glfwGetTime();
+		world_rotation.x += delta_time * 20.0f;
+		world_rotation.y += delta_time * 5.0f;
 
-		SetWorldRotation(delta_time * 20.0f, delta_time * 10.0f, 0.0f);
 	}
 
 	/**
