@@ -1,4 +1,4 @@
-#include "resource-manager.h"
+#include "resource_manager.h"
 
 #include <GLFW/glfw3.h>
 #include <string>
@@ -75,9 +75,9 @@ std::string ResourceManager::ReadShaderFile(const GLchar* shader_path)
 	}
 	catch (std::ifstream::failure& e)
 	{
-		std::cout << "ERROR::SHADER::FAILED_READING_FILE" << std::endl;
-		std::cout << "error: failed reading the file: " << shader_path << std::endl;
-		std::cout << "--------------------------------------------------------" << std::endl;
+		std::cerr << "ERROR::SHADER::FAILED_READING_FILE" << std::endl;
+		std::cerr << "error: failed reading the file: " << shader_path << std::endl;
+		std::cerr << "--------------------------------------------------------" << std::endl;
 	}
 
 	// Return the shader_code
@@ -119,8 +119,8 @@ GLubyte* ResourceManager::ReadTextureFile(const std::string& file, int* width, i
 
 	if (not image_data)
 	{
-		std::cout << "Error: Failed loading texture file: " << file << std::endl;
-		std::cout << "--------------------------------------------------------" << std::endl;
+		std::cerr << "Error: Failed loading texture file: " << file << std::endl;
+		std::cerr << "--------------------------------------------------------" << std::endl;
 	}
 
 	return image_data;

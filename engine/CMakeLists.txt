@@ -16,8 +16,8 @@ list(APPEND ENGINE_SOURCES source/shader.cpp)
 list(APPEND ENGINE_HEADERS include/texture.h)
 list(APPEND ENGINE_SOURCES source/texture.cpp)
 
-list(APPEND ENGINE_HEADERS include/resource-manager.h)
-list(APPEND ENGINE_SOURCES source/resource-manager.cpp)
+list(APPEND ENGINE_HEADERS include/resource_manager.h)
+list(APPEND ENGINE_SOURCES source/resource_manager.cpp)
 
 
 
@@ -58,13 +58,14 @@ endif()
 
 # GLFW
 add_subdirectory(thirdparty/glfw)
-
+#find_package(glfw REQUIRED HINTS thirdparty/glfw/CMake)
 target_link_libraries(Engine PUBLIC glfw)
-target_include_directories(Engine PUBLIC thirdparty/glfw/include)
 
 # force off glfw's examples and tests
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Build the GLFW example programs" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "Build the GLFW test programs" FORCE)
+set(GLFW_BUILD_EXAMPLES  OFF  CACHE  BOOL  "Build the GLFW example programs"  FORCE)
+set(GLFW_BUILD_TESTS     OFF  CACHE  BOOL  "Build the GLFW test programs"     FORCE)
+set(GLFW_BUILD_DOCS      OFF  CACHE  BOOL  "Build the GLFW documentation"     FORCE)
+set(GLFW_INSTALL         OFF  CACHE  BOOL  "Generate installation target"     FORCE)
 
 # GLAD
 target_include_directories(Engine PUBLIC thirdparty/glad/include)
@@ -73,6 +74,11 @@ target_sources(Engine PRIVATE thirdparty/glad/src/glad.c)
 # STB_IMAGE
 target_include_directories(Engine PUBLIC thirdparty/stb/include)
 target_sources(Engine PRIVATE thirdparty/stb/src/stb_image.cpp)
+
+# GLM
+find_package(glm REQUIRED)
+target_link_libraries(Engine PUBLIC glm)
+
 
 #=======================================================================================================================
 # Enable unit tests

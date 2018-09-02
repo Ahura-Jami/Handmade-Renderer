@@ -3,6 +3,7 @@
 
 #include <glad/glad.h>
 #include <string>
+#include <glm/glm.hpp>
 
 /** Shader class */
 class Shader
@@ -32,22 +33,19 @@ public:
 	void SetBool	(const GLchar* name, GLboolean value) const;
 	void SetInteger	(const GLchar* name, GLint 	   value) const;
 	void SetFloat	(const GLchar* name, GLfloat   value) const;
-//	void SetVector2f(const GLchar* name, GLfloat   value) const;
-//	void SetVector3f(const GLchar* name, GLfloat   value) const;
-//	void SetVector4f(const GLchar* name, GLfloat   value) const;
-//	void SetMatrix4	(const GLchar* name, GLfloat   value) const;
+	void SetMatrix4	(const GLchar* name, const glm::mat4& value) const;
 	///@}
-//
-//	///@{
-//	/**
-//	 * Queries a uniform location and sets its value
-//	 * @param [in] name Name of the uniform
-//	 * @param [in] x
-//	 */
+
+	///@{
+	/**
+	 * Queries a uniform location and sets its value
+	 * @param [in] name Name of the uniform
+	 * @param [in] value
+	 */
 //	void SetVector2f(const std::string& name, float value,) const;
 //	void SetVector3f(const std::string& name, float value,) const;
 //	void SetVector4f(const std::string& name, float value,) const;
-//	///@}
+	///@}
 
 
 private:

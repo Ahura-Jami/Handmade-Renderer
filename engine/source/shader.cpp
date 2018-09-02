@@ -4,6 +4,8 @@
 #include <GLFW/glfw3.h>
 #include <string>
 #include <iostream>
+#include <glm/gtc/type_ptr.hpp>
+
 
 Shader::Shader(const std::string& vertex_code,
 			   const std::string& fragment_code,
@@ -51,7 +53,7 @@ GLuint Shader::CreateAndCompileShader(GLenum shader_type, const std::string &sha
 	{
 		default:
 		{
-			std::cout << "Invalid input shader type." << std::endl;
+			std::cerr << "Invalid input shader type." << std::endl;
 			return 0;
 		}
 		case GL_VERTEX_SHADER:
@@ -124,8 +126,8 @@ void Shader::CheckCompileOrLinkErrors(GLuint shader, const std::string &type) co
 		if (!success)
 		{
 			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-			std::cout << "ERROR::SHADER_COMPILATION_ERROR::" << type << "\n" << infoLog;
-			std::cout << "--------------------------------------------------------" << std::endl;
+			std::cerr << "ERROR::SHADER_COMPILATION_ERROR::" << type << "\n" << infoLog;
+			std::cerr << "--------------------------------------------------------" << std::endl;
 		}
 	}
 	else
@@ -134,8 +136,8 @@ void Shader::CheckCompileOrLinkErrors(GLuint shader, const std::string &type) co
 		if (!success)
 		{
 			glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-			std::cout << "ERROR::SHADER_PROGRAM_LINKING_ERROR\n" << infoLog << std::endl;
-			std::cout << "--------------------------------------------------------" << std::endl;
+			std::cerr << "ERROR::SHADER_PROGRAM_LINKING_ERROR\n" << infoLog << std::endl;
+			std::cerr << "--------------------------------------------------------" << std::endl;
 		}
 	}
 }
@@ -156,4 +158,9 @@ void Shader::SetInteger(const GLchar* name, int value) const
 void Shader::SetFloat(const GLchar* name, float value) const
 {
 	glUniform1f(glGetUniformLocation(id, name), value);
+}
+
+void Shader::SetMatrix4(const GLchar *name, const glm::mat4& value) const
+{
+	glUniformMatrix4fv(glGetUniformLocation(id, name), 1, GL_FALSE, glm::value_ptr(value));
 }

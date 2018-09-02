@@ -2,8 +2,11 @@
 
 #include <iostream>
 #include <cmath>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
-#include "resource-manager.h"
+#include "resource_manager.h"
 
 Engine::Engine()
 {
@@ -87,6 +90,16 @@ void Engine::ProcessInput()
 
 void Engine::Render()
 {
+	glEnable(GL_DEPTH_TEST);
+
+//	glm::mat4 trans = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
+//
+	glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f),
+									  static_cast<float>(window_width)/ static_cast<float>(window_height),
+									  0.1f,
+									  100.0f
+	);
+
 	// Tell OpenGL to which texture unit each shader sampler belongs to by setting
 	// each sampler using glUniform1i. We only have to set this once, so we can do
 	// this before we enter the render loop
@@ -110,12 +123,19 @@ void Engine::Render()
 
 		// Rendering facilities
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		for (auto& actor : actors)
 		{
 			// Activate the program and set it as current program to be used for subsequent drawing commands.
 			actor.shader.Use();
+
+			// Processes the transformations
+			glm::mat4 view = glm::mat4(1.0f);
+			view = glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f));
+
+			actor.SetWorldRotation(glfwGetTime() * 20.0f, glfwGetTime() * 10.0f, 0.0f);
+			actor.shader.SetMatrix4("transform", projection_matrix * view * actor.GetModelMatrix());
 
 			// Loop over the textures and bind them each
 			for (int id = 0; id < actor.textures.size(); ++id)
