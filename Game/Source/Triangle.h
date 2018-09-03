@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 
-#include "actor.h"
+#include "Actor.h"
 
 class Triangle : public Actor
 {

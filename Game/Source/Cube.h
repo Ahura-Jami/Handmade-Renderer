@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#include "actor.h"
+#include "Actor.h"
 
 
 class Cube : public Actor

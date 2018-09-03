@@ -1,4 +1,4 @@
-#include "engine.h"
+#include "Engine.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -9,9 +9,9 @@
 #include <cmath>
 #include <vector>
 
-#include "resource_manager.h"
-#include "camera.h"
-#include "types.h"
+#include "ResourceManager.h"
+#include "Camera.h"
+#include "Types.h"
 
 void MouseMovementCallback(GLFWwindow* window, double mouse_position_x, double mouse_position_y);
 

@@ -5,8 +5,8 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 
-#include "actor.h"
-#include "camera.h"
+#include "Actor.h"
+#include "Camera.h"
 
 class Engine
 {

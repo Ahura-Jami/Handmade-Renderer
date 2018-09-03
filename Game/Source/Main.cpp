@@ -2,14 +2,14 @@
 #include <memory>
 #include <cstring>
 
-#include "engine.h"
-#include "shader.h"
-#include "texture.h"
-#include "resource_manager.h"
+#include "Engine.h"
+#include "Shader.h"
+#include "Texture.h"
+#include "ResourceManager.h"
 
-#include "triangle.h"
-#include "rectangle.h"
-#include "cube.h"
+#include "Triangle.h"
+#include "Rectangle.h"
+#include "Cube.h"
 
 int main()
 {
@@ -23,24 +23,24 @@ int main()
 	// Load the shaders
 	auto shader = ResourceManager::LoadShader(
 			"triangle",
-			PROJECT_DIR + std::string("/game/shaders/triangle_shader.vert"), // vertex shader
-			PROJECT_DIR + std::string("/game/shaders/triangle_shader.frag") // fragment shader
+			PROJECT_DIR + std::string("/Game/Shaders/Triangle.vert"), // vertex shader
+			PROJECT_DIR + std::string("/Game/Shaders/Triangle.frag") // fragment shader
 	);
 
 	// Load all the textures
 	auto wood_texture = ResourceManager::LoadTexture(
 			"wood",
-			PROJECT_DIR + std::string("/game/textures/wooden-container.jpg")
+			PROJECT_DIR + std::string("/Game/Textures/wooden-container.jpg")
 	);
 
 	auto wall_texture = ResourceManager::LoadTexture(
 			"wall",
-			PROJECT_DIR + std::string("/game/textures/wall.jpg")
+			PROJECT_DIR + std::string("/Game/Textures/wall.jpg")
 	);
 
 	auto smiley_texture = ResourceManager::LoadTexture(
 			"smiley",
-			PROJECT_DIR + std::string("/game/textures/awesomeface.png")
+			PROJECT_DIR + std::string("/Game/Textures/awesomeface.png")
 	);
 
 	// Create rectangle
@@ -75,8 +75,8 @@ int main()
 	// Load the cube shaders
 	auto cube_shader = ResourceManager::LoadShader(
 			"cube",
-			PROJECT_DIR + std::string("/game/shaders/cube.vert"), // vertex shader
-			PROJECT_DIR + std::string("/game/shaders/cube.frag") // fragment shader
+			PROJECT_DIR + std::string("/Game/Shaders/Cube.vert"), // vertex shader
+			PROJECT_DIR + std::string("/Game/Shaders/Cube.frag") // fragment shader
 	);
 
 	glm::vec3 cube_positions[] = {

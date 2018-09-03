@@ -1,12 +1,12 @@
-#include "camera.h"
+#include "Camera.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <iostream>
 
-#include "emath.h"
-#include "types.h"
+#include "Math.h"
+#include "Types.h"
 
 Camera::Camera()
 {

@@ -5,8 +5,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
-#include "actor.h"
-#include "types.h"
+#include "Actor.h"
+#include "Types.h"
 
 
 class Camera : public Actor

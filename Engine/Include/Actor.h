@@ -8,9 +8,9 @@
 #include <functional>
 #include <memory>
 
-#include "shader.h"
-#include "texture.h"
-#include "types.h"
+#include "Shader.h"
+#include "Texture.h"
+#include "Types.h"
 
 class Actor
 {

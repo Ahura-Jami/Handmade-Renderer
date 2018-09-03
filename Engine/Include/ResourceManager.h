@@ -4,8 +4,8 @@
 #include <map>
 #include <string>
 
-#include "shader.h"
-#include "texture.h"
+#include "Shader.h"
+#include "Texture.h"
 
 /**
  * A static singleton ResourceManager class that hosts severalfunctions to load textures and shaders.

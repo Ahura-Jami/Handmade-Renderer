@@ -4,10 +4,10 @@ cmake_minimum_required(VERSION 3.8.0)
 # Add Source and header files
 #=======================================================================================================================
 # Main Module
-list(APPEND SOURCE_FILES source/main.cpp)
-list(APPEND HEADER_FILES source/triangle.h)
-list(APPEND HEADER_FILES source/rectangle.h)
-list(APPEND HEADER_FILES source/cube.h)
+list(APPEND SOURCE_FILES Source/Main.cpp)
+list(APPEND HEADER_FILES Source/Triangle.h)
+list(APPEND HEADER_FILES Source/Rectangle.h)
+list(APPEND HEADER_FILES Source/Cube.h)
 
 mark_as_advanced(${SOURCE_FILES} ${HEADER_FILES})
 
