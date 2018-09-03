@@ -107,6 +107,9 @@ private:
 	 */
 	const unsigned int window_height = 600;
 
+	/** Time it takes to render each frame */
+	float delta_time = 0.0f;
+
 	/**
 	 * List of registered renderable objects
 	 */

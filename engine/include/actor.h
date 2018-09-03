@@ -20,7 +20,6 @@ public:
 	{
 		world_rotation.x += delta_time * 20.0f;
 		world_rotation.y += delta_time * 5.0f;
-
 	}
 
 	/**

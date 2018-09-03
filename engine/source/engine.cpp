@@ -14,12 +14,6 @@ glm::vec3 camera_pos = glm::vec3(0.0f, 0.0f, 3.0f);
 glm::vec3 camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 camera_up = glm::vec3(0.0f, 1.0f, 0.0f);
 
-// Global variables to calculate delta time
-/** Time between current frame and last frame */
-float delta_time = 0.0f;
-
-/** Time of last frame */
-float time_last_frame = 0.0f;
 
 Engine::Engine()
 {
@@ -127,6 +121,9 @@ void Engine::Render()
 {
 	glEnable(GL_DEPTH_TEST);
 
+	/** Time of last frame */
+	float time_last_frame = 0.0f;
+
 //	glm::mat4 trans = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
 //
 	glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f),
@@ -150,8 +147,6 @@ void Engine::Render()
 		}
 	}
 
-
-
 	// Render loop
 	while(!glfwWindowShouldClose(window))
 	{
@@ -166,7 +161,7 @@ void Engine::Render()
 		// TODO(Ahura): Move these to camera class
 		glm::mat4 view = glm::lookAt(camera_pos, camera_pos + camera_front, camera_up);
 
-		for (auto& actor : actors)
+		for (Actor& actor : actors)
 		{
 			// Call actor's tick function
 			actor.Tick(delta_time);
@@ -201,7 +196,7 @@ void Engine::Render()
 		glfwPollEvents();
 
 		// Processes delta time
-		float time_current_frame = glfwGetTime();
+		const auto time_current_frame = static_cast<float>(glfwGetTime());
 		delta_time = time_current_frame - time_last_frame;
 		time_last_frame = time_current_frame;
 	}
