@@ -22,7 +22,7 @@ public:
 	 * Use/activate the shader program
 	 * @return
 	 */
-	void Use();
+	void Use() const;
 
 	///@{
 	/**

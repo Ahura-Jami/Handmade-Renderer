@@ -38,7 +38,7 @@ Shader::Shader(const std::string& vertex_code,
 }
 
 
-void Shader::Use()
+void Shader::Use() const
 {
 	glUseProgram(id);
 //	return *this;

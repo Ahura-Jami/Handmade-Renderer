@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "actor.h"
+#include "camera.h"
 
 class Engine
 {
@@ -91,6 +92,13 @@ private:
 	 */
 	void ProcessInput();
 
+
+public:
+	// TODO(Ahura): I don't like this being static, but I have to because it is used in
+	// MouseMovementCallback and MouseScrollCallback. See if there is an alternative way
+	// to capture mouse movements.
+	static Camera scene_camera;
+
 private:
 	/**
 	 * A GLFW Window Object that will be initialized in Init()
@@ -114,6 +122,7 @@ private:
 	 * List of registered renderable objects
 	 */
 	 std::vector<Actor> actors;
+
 };
 
 #endif

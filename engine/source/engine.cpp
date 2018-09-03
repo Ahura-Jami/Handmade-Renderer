@@ -1,23 +1,27 @@
 #include "engine.h"
 
-#include <iostream>
-#include <cmath>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
+#include <cmath>
+#include <vector>
 
 #include "resource_manager.h"
+#include "camera.h"
+#include "types.h"
 
-// camera variables
-// TODO(Ahura): Move these to camera class
-glm::vec3 camera_pos = glm::vec3(0.0f, 0.0f, 3.0f);
-glm::vec3 camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 camera_up = glm::vec3(0.0f, 1.0f, 0.0f);
+void MouseMovementCallback(GLFWwindow* window, double mouse_position_x, double mouse_position_y);
 
+void MouseScrollCallback(GLFWwindow* window, double offset_x, double offset_y);
+
+Camera Engine::scene_camera = Camera();
 
 Engine::Engine()
 {
-
+	
 }
 
 Engine::~Engine()
@@ -63,7 +67,7 @@ bool Engine::Init()
 
 	if (window == NULL)
 	{
-		puts("Failed to create GLFW window");
+		std::cerr << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 		successfully_created = false;
 	}
@@ -75,9 +79,17 @@ bool Engine::Init()
 	// Load all OpenGL function pointers through GLUT
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		puts("Failed to initialize GLAD");
+		std::cerr << "Failed to initialize GLAD" << std::endl;
 		successfully_created = false;
 	}
+
+	//TODO(Ahura): find a better place for these (See also TODO for scene_camera member in Engine header)
+	// Tell GLFW to capture the mouse cursor (but do not hide it)
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+	// Register mouse movement callback
+	glfwSetCursorPosCallback(window, MouseMovementCallback);
+	glfwSetScrollCallback(window, MouseScrollCallback);
 
 	return successfully_created;
 }
@@ -94,27 +106,27 @@ void Engine::ProcessInput()
 		glfwSetWindowShouldClose(window, true);
 	}
 
-	// TODO(Ahura): Move to camera class
-	float camera_speed = 2.5f * delta_time;
+	// TODO(Ahura): A better solution would be to allow each class (actor) register its inputs
 	if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		camera_pos += camera_speed * camera_front;
+		scene_camera.MoveForward(InputKey::W, delta_time);
 	}
 
 	if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 	{
-		camera_pos -= camera_speed * camera_front;
+		scene_camera.MoveForward(InputKey::S, delta_time);
 	}
 
 	if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 	{
-		camera_pos -= glm::normalize(glm::cross(camera_front, camera_up)) * camera_speed;
+		scene_camera.MoveRight(InputKey::A, delta_time);
 	}
 
 	if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 	{
-		camera_pos += glm::normalize(glm::cross(camera_front, camera_up)) * camera_speed;
+		scene_camera.MoveRight(InputKey::D, delta_time);
 	}
+
 }
 
 void Engine::Render()
@@ -123,14 +135,6 @@ void Engine::Render()
 
 	/** Time of last frame */
 	float time_last_frame = 0.0f;
-
-//	glm::mat4 trans = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
-//
-	glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f),
-									  static_cast<float>(window_width)/ static_cast<float>(window_height),
-									  0.1f,
-									  100.0f
-	);
 
 	// Tell OpenGL to which texture unit each shader sampler belongs to by setting
 	// each sampler using glUniform1i. We only have to set this once, so we can do
@@ -157,9 +161,17 @@ void Engine::Render()
 		// User inputs
 		ProcessInput();
 
-		// camera variables
-		// TODO(Ahura): Move these to camera class
-		glm::mat4 view = glm::lookAt(camera_pos, camera_pos + camera_front, camera_up);
+		// We put in the render loop because mouse scroll callback will update the field_of_view and
+		// hence this matrix must be updated
+		glm::mat4 projection_matrix = glm::perspective(
+				glm::radians(scene_camera.GetCurrentFieldOfView()),
+				static_cast<float>(window_width)/ static_cast<float>(window_height),
+				scene_camera.GetNearPlane(),
+				scene_camera.GetFarPlane()
+		);
+
+		// TODO(Ahura): Maybe register this with other actors (objects)?
+		scene_camera.Tick(delta_time);
 
 		for (Actor& actor : actors)
 		{
@@ -169,7 +181,8 @@ void Engine::Render()
 			// Activate the program and set it as current program to be used for subsequent drawing commands.
 			actor.shader.Use();
 
-			actor.shader.SetMatrix4("transform", projection_matrix * view * actor.GetModelMatrix());
+			actor.shader.SetMatrix4("transform",
+					projection_matrix * scene_camera.GetViewMatrix() * actor.GetModelMatrix());
 
 			// Loop over the textures and bind them each
 			for (int id = 0; id < actor.textures.size(); ++id)
@@ -205,4 +218,20 @@ void Engine::Render()
 	Destroy();
 }
 
+/**
+ * Callback for mouse movements that is registered in GLFW
+ */
+// TODO(Ahura): Not ideal to have this callback here in the engine class itself.
+void MouseMovementCallback(GLFWwindow* window, double mouse_position_x, double mouse_position_y)
+{
+	Engine::scene_camera.ProcessMouseMovement(glm::vec2(mouse_position_x, mouse_position_y));
+}
 
+/**
+ * Callback for mouse scroll that is registered in GLFW
+ */
+// TODO(Ahura): Not ideal to have this callback here in the engine class itself.
+void MouseScrollCallback(GLFWwindow* window, double offset_x, double offset_y)
+{
+	Engine::scene_camera.Zoom(offset_y);
+}

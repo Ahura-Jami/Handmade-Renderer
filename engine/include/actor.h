@@ -10,17 +10,14 @@
 
 #include "shader.h"
 #include "texture.h"
+#include "types.h"
 
 class Actor
 {
 public:
 	Actor() = default;
 
-	void Tick(float delta_time)
-	{
-		world_rotation.x += delta_time * 20.0f;
-		world_rotation.y += delta_time * 5.0f;
-	}
+	virtual void Tick(float delta_time) {};
 
 	/**
 	 * Transfer the ownership of the texture to
@@ -44,22 +41,22 @@ public:
 		world_location.z = z;
 	}
 
-	void SetWorldRotation(float x, float y, float z)
+	void SetWorldRotation(float yaw, float pitch, float roll)
 	{
-		world_rotation.x = x;
-		world_rotation.y = y;
-		world_rotation.z = z;
+		world_rotation.yaw = yaw;
+		world_rotation.pitch = pitch;
+		world_rotation.roll = roll;
 	}
 
-	glm::mat4 GetModelMatrix()
+	glm::mat4 GetModelMatrix() const
 	{
 		glm::mat4 model_mat = glm::mat4(1.0f);
 		model_mat = glm::translate(model_mat, world_location);
 
 		// TODO(Ahura): This may result in Gimbal lock. Implement quaternions instead.
-		model_mat = glm::rotate(model_mat, glm::radians(world_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-		model_mat = glm::rotate(model_mat, glm::radians(world_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-		model_mat = glm::rotate(model_mat, glm::radians(world_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+		model_mat = glm::rotate(model_mat, glm::radians(world_rotation.yaw), glm::vec3(1.0f, 0.0f, 0.0f));
+		model_mat = glm::rotate(model_mat, glm::radians(world_rotation.pitch), glm::vec3(0.0f, 1.0f, 0.0f));
+		model_mat = glm::rotate(model_mat, glm::radians(world_rotation.roll), glm::vec3(0.0f, 0.0f, 1.0f));
 
 		model_mat = glm::scale(model_mat, world_scale);
 
@@ -77,7 +74,7 @@ public:
 	std::function<void()> draw_function;
 
 	glm::vec3 world_location = glm::vec3(0.0f);
-	glm::vec3 world_rotation = glm::vec3(0.0f);
+	Rotator world_rotation = Rotator(0.0f, 0.0f, 0.0f);
 	glm::vec3 world_scale = glm::vec3(1.0f);
 };
 

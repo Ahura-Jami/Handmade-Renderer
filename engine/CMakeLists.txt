@@ -8,16 +8,22 @@ project(Engine VERSION 0.0.1)
 list(APPEND ENGINE_HEADERS include/engine.h)
 list(APPEND ENGINE_SOURCES source/engine.cpp)
 
+list(APPEND ENGINE_HEADERS include/types.h)
 list(APPEND ENGINE_HEADERS include/actor.h)
 
 list(APPEND ENGINE_HEADERS include/shader.h)
 list(APPEND ENGINE_SOURCES source/shader.cpp)
+
+list(APPEND ENGINE_HEADERS include/camera.h)
+list(APPEND ENGINE_SOURCES source/camera.cpp)
 
 list(APPEND ENGINE_HEADERS include/texture.h)
 list(APPEND ENGINE_SOURCES source/texture.cpp)
 
 list(APPEND ENGINE_HEADERS include/resource_manager.h)
 list(APPEND ENGINE_SOURCES source/resource_manager.cpp)
+
+list(APPEND ENGINE_HEADERS include/emath.h)
 
 
 
