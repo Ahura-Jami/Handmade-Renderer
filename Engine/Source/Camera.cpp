@@ -110,8 +110,8 @@ void Camera::ProcessMouseMovement(glm::vec2 mouse_position)
 
 void Camera::Zoom(double amount)
 {
-	if (field_of_view >= 1.0f && field_of_view <= 45.0f)
-		field_of_view -= amount;
+	if (current_field_of_view >= 1.0f && current_field_of_view <= 45.0f)
+		current_field_of_view -= amount;
 
-	field_of_view = ClampIntoRange(field_of_view, 1.0f, 45.0f);
+	current_field_of_view = ClampIntoRange(current_field_of_view, 1.0f, field_of_view);
 }
