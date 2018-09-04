@@ -37,9 +37,9 @@ void Engine::Destroy()
 	// optional: de-allocate all resources once they've outlived their purpose:
 	for(auto& actor : actors)
 	{
-		glDeleteVertexArrays(1, &actor.vertex_array_object);
-		glDeleteBuffers(1, &actor.vertex_buffer_object);
-		glDeleteBuffers(1, &actor.element_buffer_object);
+		glDeleteVertexArrays(1, &actor->vertex_array_object);
+		glDeleteBuffers(1, &actor->vertex_buffer_object);
+		glDeleteBuffers(1, &actor->element_buffer_object);
 	}
 
 	// terminate glfw to clear all previously allocated GLFW resources.
@@ -85,7 +85,7 @@ bool Engine::Init()
 
 	//TODO(Ahura): find a better place for these (See also TODO for scene_camera member in Engine header)
 	// Tell GLFW to capture the mouse cursor (but do not hide it)
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// Register mouse movement callback
 	glfwSetCursorPosCallback(window, MouseMovementCallback);
@@ -141,13 +141,13 @@ void Engine::Render()
 	// this before we enter the render loop
 	for (auto& actor : actors)
 	{
-		actor.shader.Use();
+		actor->shader.Use();
 
 		// The id of texture which allows for the texture to be mapped
 		// to its specific uniform in the fragment shader.
-		for (int id = 0; id < actor.textures.size(); ++id)
+		for (int id = 0; id < actor->textures.size(); ++id)
 		{
-			actor.shader.SetInteger(("texture" + std::to_string(id)).c_str(), id);
+			actor->shader.SetInteger(("texture" + std::to_string(id)).c_str(), id);
 		}
 	}
 
@@ -173,29 +173,36 @@ void Engine::Render()
 		// TODO(Ahura): Maybe register this with other actors (objects)?
 		scene_camera.Tick(delta_time);
 
-		for (Actor& actor : actors)
+		for (auto actor : actors)
 		{
 			// Call actor's tick function
-			actor.Tick(delta_time);
+			actor->Tick(delta_time);
 
 			// Activate the program and set it as current program to be used for subsequent drawing commands.
-			actor.shader.Use();
+			actor->shader.Use();
 
-			actor.shader.SetMatrix4("transform",
-					projection_matrix * scene_camera.GetViewMatrix() * actor.GetModelMatrix());
+			const auto model = actor->GetModelMatrix();
+			const auto view = scene_camera.GetViewMatrix() ;
+			const auto model_view = view * model;
+			const auto model_view_projection = projection_matrix * model_view;
+//			actor->shader.SetMat4("model", model);
+			actor->shader.SetMat4("view", view);
+			actor->shader.SetMat4("model_view", model_view);
+			actor->shader.SetMat4("model_view_projection", model_view_projection);
+			actor->shader.SetVec3("in_light_position", 0.0f, 0.0f, -3.0f);
 
 			// Loop over the textures and bind them each
-			for (int id = 0; id < actor.textures.size(); ++id)
+			for (int id = 0; id < actor->textures.size(); ++id)
 			{
 				// Activate the texture unit first before binding texture
 				glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + id));
-				actor.textures[id].Bind();
+				actor->textures[id].Bind();
 			}
 			// Bind vertex array object
-			glBindVertexArray(actor.vertex_array_object);
+			glBindVertexArray(actor->vertex_array_object);
 
 			// Call the actor's draw command
-			actor.draw_function();
+			actor->draw_function();
 
 			// Unbind the textures
 			glBindTexture(GL_TEXTURE_2D, 0);

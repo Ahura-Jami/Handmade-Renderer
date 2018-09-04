@@ -33,7 +33,8 @@ public:
 	void SetBool	(const GLchar* name, GLboolean value) const;
 	void SetInteger	(const GLchar* name, GLint 	   value) const;
 	void SetFloat	(const GLchar* name, GLfloat   value) const;
-	void SetMatrix4	(const GLchar* name, const glm::mat4& value) const;
+	void SetVec3	(const GLchar* name, float x, float y, float z) const;
+	void SetMat4    (const GLchar *name, const glm::mat4 &value) const;
 	///@}
 
 	///@{

@@ -48,6 +48,13 @@ public:
 		world_rotation.roll = roll;
 	}
 
+	void SetWorldScale(float x, float y, float z)
+	{
+		world_scale.x = x;
+		world_scale.y = y;
+		world_scale.z = z;
+	}
+
 	glm::mat4 GetModelMatrix() const
 	{
 		glm::mat4 model_mat = glm::mat4(1.0f);
@@ -67,7 +74,7 @@ public:
 	GLuint vertex_buffer_object{};
 	GLuint element_buffer_object{};
 
-	std::vector<Texture2D> textures;
+	std::vector<Texture2D> textures{};
 
 	Shader shader;
 

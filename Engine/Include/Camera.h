@@ -43,6 +43,9 @@ public:
 	float GetFarPlane() const { return far_plane; }
 	float SetFarPlane(float value) { far_plane = value; }
 
+	Vector3 GetWorldLocation() const { return position; }
+	Vector3 GetFrontAxis() const { return front_axis; }
+
 private:
 	Vector3 position = Vector3(0.0f, 0.0f, 3.0f);
 	Rotator rotation = Rotator(-90.0f, 0.0f, 0.0f);

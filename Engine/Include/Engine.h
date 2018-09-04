@@ -36,7 +36,7 @@ public:
 	 * Register a renderable object that inherits from Actor
 	 * @param [in] actor An object that inherits from Actor
 	 */
-	void Register(const Actor& actor)
+	void Register(std::shared_ptr<Actor> actor)
 	{
 		actors.emplace_back(actor);
 	}
@@ -121,7 +121,7 @@ private:
 	/**
 	 * List of registered renderable objects
 	 */
-	 std::vector<Actor> actors;
+	 std::vector<std::shared_ptr<Actor>> actors;
 
 };
 

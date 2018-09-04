@@ -1,6 +1,7 @@
 #include <iostream>
 #include <memory>
 #include <cstring>
+#include <vector>
 
 #include "Engine.h"
 #include "Shader.h"
@@ -79,8 +80,9 @@ int main()
 			PROJECT_DIR + std::string("/Game/Shaders/Cube.frag") // fragment shader
 	);
 
+
 	glm::vec3 cube_positions[] = {
-			glm::vec3( 0.0f,  0.0f,  0.0f),
+			//			glm::vec3( 0.0f,  0.0f,  0.0f),
 			glm::vec3( 2.0f,  5.0f, -15.0f),
 			glm::vec3(-1.5f, -2.2f, -2.5f),
 			glm::vec3(-3.8f, -2.0f, -12.3f),
@@ -92,22 +94,41 @@ int main()
 			glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 
+	auto cubes = std::vector<std::shared_ptr<Cube>>(10);
 	for (int i = 0; i < 10; i++)
 	{
-		auto cube = Cube();
-		cube.SetShader(cube_shader);
-		cube.AddTexture(wood_texture);
-		cube.AddTexture(smiley_texture);
+		auto cube = cubes[i];
+		cube = std::make_shared<Cube>();
 
-		cube.SetWorldLocation(cube_positions[i].x, cube_positions[i].y, cube_positions[i].z);
+		cube_shader.Use();
+		cube_shader.SetVec3("light_color", 1.0f, 1.0f, 1.0f);
+		cube_shader.SetVec3("light_position", 0.0f, 0.0f, -3.0f);
 
-		cube.SetWorldRotation(20.0f * i, -20.0f * i, 0.0f);
+		cube->SetShader(cube_shader);
+		cube->AddTexture(wood_texture);
+		cube->AddTexture(smiley_texture);
+
+		cube->SetWorldLocation(cube_positions[i].x, cube_positions[i].y, cube_positions[i].z);
+
+		cube->SetWorldRotation(20.0f * i, -20.0f * i, 0.0f);
 
 		engine->Register(cube);
 	}
 
-//	engine->ToggleWireframe();
+	auto light = std::make_shared<Cube>();
 
+	auto light_shader = ResourceManager::LoadShader(
+			"light",
+			PROJECT_DIR + std::string("/Game/Shaders/Cube.vert"), // vertex shader
+			PROJECT_DIR + std::string("/Game/Shaders/Light.frag") // fragment shader
+	);
+
+	light->SetWorldLocation(0.0f, 0.0f, -3.0f);
+	light->SetWorldScale(0.25f, 0.25f, 0.25f);
+	light->SetShader(light_shader);
+
+
+	engine->Register(light);
 	// Render the registered actors
 	engine->Render();
 }

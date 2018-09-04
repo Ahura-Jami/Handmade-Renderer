@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <glm/gtc/type_ptr.hpp>
+#include <Shader.h>
 
 
 Shader::Shader(const std::string& vertex_code,
@@ -160,7 +161,12 @@ void Shader::SetFloat(const GLchar* name, float value) const
 	glUniform1f(glGetUniformLocation(id, name), value);
 }
 
-void Shader::SetMatrix4(const GLchar *name, const glm::mat4& value) const
+void Shader::SetMat4(const GLchar *name, const glm::mat4 &value) const
 {
 	glUniformMatrix4fv(glGetUniformLocation(id, name), 1, GL_FALSE, glm::value_ptr(value));
+}
+
+void Shader::SetVec3(const GLchar *name, float x, float y, float z) const
+{
+	glUniform3f(glGetUniformLocation(id, name), x, y, z);
 }
